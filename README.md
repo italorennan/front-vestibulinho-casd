@@ -9,6 +9,7 @@ nas diversas etapas do processo.
 ### Tecnologias
 Projeto desenvolvido com [React](https://reactjs.org) e com as seguintes dependências:
  - [Styled-components](https://styled-components.com/)
+ - [React-Router-DOM](https://reacttraining.com/react-router/)
  - [Material-UI](https://material-ui.com/)
 
 ### Layout das telas
