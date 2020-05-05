@@ -6,7 +6,7 @@ function InitialDataInputs() {
   const [initialData, setInitialData] = useState({});
   const { setFormData } = useContext(FormRegistrationContext);
 
-  useEffect(() => setFormData(initialData), [initialData, setInitialData]);
+  useEffect(() => setFormData(initialData), [initialData, setFormData, setInitialData]);
 
   return (
     <Container>

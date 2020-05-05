@@ -3,17 +3,29 @@ import FormRegistrationContext from './context';
 import { Container } from './styles';
 import InitialDataInputs from '../../sections/InitialDataInputs';
 
+import api from '../../api';
+
 function FormRegistration() {
   const [formData, setFormData] = useState({});
-  // IDEIA: sectionId 'state' que define qual section (pedaço de form) a ser exibido em tela
-  // se não existir RG cadastrado no banco, altera o conteúdo do state sectionId
+  const [hasRGCandidate, setHasRGCandidate] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault(); 
-    console.log('VERIFICAR NO BANCO SE JÁ EXISTE O RG CADASTRADO');
-    console.log('Se sim, aviso: "Esse RG já foi cadastrado!"');
-    console.log('Se não, button libera a próxima section --> PersonalDataForm');
-    console.log('formData', formData);
+    console.log(`VERIFICAR NO BANCO SE JÁ EXISTE O RG ${formData.rg} CADASTRADO`);
+
+    const respGET = await api.get(`/candidate/checkCandidate?rg=${formData.rg}`);
+    if (respGET.data.candidateBool) { //existe cadastro com esse rg
+      setHasRGCandidate(true);
+    } else { //não existe cadastro com esse rg
+      setHasRGCandidate(false);
+      //POST temporário
+      await api.post('/candidate/createCandidate', 
+        JSON.stringify(formData), { headers: { 'Content-Type': 'application/json' }}
+      );
+
+      console.log('Prosseguir com o preenchimento do formulário');
+      console.log('Button libera a próxima section --> PersonalDataForm');
+    }
   }
 
   return (
@@ -23,6 +35,7 @@ function FormRegistration() {
           <InitialDataInputs />
           <button className="btn" type="submit">Continuar</button>
         </form>
+        {hasRGCandidate === true ? <p>Esse RG já foi cadastrado!</p> : null}
       </Container>
     </FormRegistrationContext.Provider>
   );
