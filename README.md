@@ -19,12 +19,12 @@ Projeto desenvolvido com [React](https://reactjs.org) e com as seguintes depend�
 ???
 
 ### Sobre o back-end
-????
+Back-end desenvolvido em [Node.js](https://nodejs.org/en/) com framework web [express](https://expressjs.com/pt-br/). É necessário ter o [Docker](docker.com) instalado em sua máquina - mais informações no [repositório](https://github.com/lulis123/back-vestibulinho-casd).
 
 ### Iniciando com o projeto
 Verificar se existe [Node.js](https://nodejs.org/en/), [npm](https://www.npmjs.com/) e [yarn](https://yarnpkg.com/) instalados na sua máquina antes de iniciar com o projeto.
 ```bash
-# Clone o repositório
+# Clone o repositório front-end
 $ git clone https://github.com/bambokianr/front-vestibulinho-casd
 
 # Entre no repositório
@@ -33,10 +33,21 @@ $ cd front-vestibulinho-casd/front
 # Instale as dependências que estão presentes no arquivo 'package.json'
 $ npm install
 
-#-??? falar de clonar e rodar o back end presente no repositorio x
+# Clone o repositório back-end
+$ git clone https://github.com/lulis123/back-vestibulinho-casd
+
+# Depois de seguir as instruções de 'getting started' do back-end
+# Entre no repositório
+$ cd back-vestibulinho-casd
+
+# Instale as dependências que estão presentes no arquivo 'package.json'
+$ npm install
 
 # Rode o projeto front-end
 $ yarn start
+
+# Rode o projeto back-end
+$ sudo yarn start
 ```
 
 ### Padrões de desenvolvimento do projeto
