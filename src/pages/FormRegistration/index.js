@@ -3,7 +3,7 @@ import FormRegistrationContext from './context';
 import { Container } from './styles';
 import InitialDataInputs from '../../sections/InitialDataInputs';
 
-import api from '../../api';
+import api from '../../services/api';
 
 function FormRegistration() {
   const [formData, setFormData] = useState({});

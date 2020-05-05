@@ -10,13 +10,23 @@ nas diversas etapas do processo.
 Projeto desenvolvido com [React](https://reactjs.org) e com as seguintes dependências:
  - [Styled-components](https://styled-components.com/)
  - [React-Router-DOM](https://reacttraining.com/react-router/)
+ - [Axios](https://github.com/axios/axios)
  - [Material-UI](https://material-ui.com/)
 
 ### Layout das telas
-????
+Ainda em desenvolvimento.
 
 ### Estrutura de pastas 
-???
+```js
+- public
+- src
+    |- components
+    |- sections
+    |- pages
+    |- styles
+    |- services
+    |- utils
+```
 
 ### Sobre o back-end
 Back-end desenvolvido em [Node.js](https://nodejs.org/en/) com framework web [express](https://expressjs.com/pt-br/). É necessário ter o [Docker](docker.com) instalado em sua máquina - mais informações no [repositório](https://github.com/lulis123/back-vestibulinho-casd).
@@ -28,7 +38,7 @@ Verificar se existe [Node.js](https://nodejs.org/en/), [npm](https://www.npmjs.c
 $ git clone https://github.com/bambokianr/front-vestibulinho-casd
 
 # Entre no repositório
-$ cd front-vestibulinho-casd/front
+$ cd front-vestibulinho-casd
 
 # Instale as dependências que estão presentes no arquivo 'package.json'
 $ npm install
