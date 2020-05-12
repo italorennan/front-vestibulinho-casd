@@ -28,7 +28,7 @@ function FormRegistration() {
       if (actualSection === 1 && formData.privateSpace && formData.privateSpace !== "") {
         setFormData({...formData, disabledButton: false });
       }
-      if (actualSection === 2 && formData.registrationFee && formData.registrationFee !== "") {
+      if (actualSection === 2 && formData.registrationFee && formData.registrationFe !== "") {
         setFormData({...formData, disabledButton: false });
       }
     } else {
@@ -44,7 +44,7 @@ function FormRegistration() {
       if (actualSection === 1 && formData.privateSpace.length === 0) {
         setFormData({...formData, disabledButton: true });
       }
-      if (actualSection === 2 && formData.privateSpace.length === 0) {
+      if (actualSection === 2 && formData.registrationFee.length === 0) {
         setFormData({...formData, disabledButton: true });
       }
     }
@@ -64,6 +64,7 @@ function FormRegistration() {
     e.preventDefault(); 
     setFormData({...formData, disabledButton: true });
     console.log('formData', formData);
+    
     if (actualSection === 0) {
       console.log(`VERIFICAR NO BANCO SE JÁ EXISTE O RG ${formData.rg} CADASTRADO`);
     }
