@@ -3,6 +3,7 @@ import FormRegistrationContext from './context';
 import { Container } from './styles';
 import InitialDataInputs from '../../sections/InitialDataInputs';
 import PrivateSpacesInputs from '../../sections/PrivateSpacesInputs';
+import RegistrationFeeInputs from '../../sections/RegistrationFeeInputs';
 
 import api from '../../services/api';
 
@@ -11,7 +12,7 @@ function FormRegistration() {
   const [formData, setFormData] = useState({});
   const [hasRGCandidate, setHasRGCandidate] = useState(false);
 
-  const sections = [<InitialDataInputs />, <PrivateSpacesInputs />];
+  const sections = [<InitialDataInputs />, <PrivateSpacesInputs />, <RegistrationFeeInputs />];
 
   useEffect(() => {
     if (formData.disabledButton && formData.disabledButton === true) {
@@ -27,6 +28,9 @@ function FormRegistration() {
       if (actualSection === 1 && formData.privateSpace && formData.privateSpace !== "") {
         setFormData({...formData, disabledButton: false });
       }
+      if (actualSection === 2 && formData.registrationFee && formData.registrationFe !== "") {
+        setFormData({...formData, disabledButton: false });
+      }
     } else {
       if (actualSection === 0 
         && (!formData.name
@@ -38,6 +42,9 @@ function FormRegistration() {
       } 
       // ALTERAR AQ CASO MUDE A ORDEM DOS SECTIONS
       if (actualSection === 1 && formData.privateSpace.length === 0) {
+        setFormData({...formData, disabledButton: true });
+      }
+      if (actualSection === 2 && formData.registrationFee.length === 0) {
         setFormData({...formData, disabledButton: true });
       }
     }
@@ -57,14 +64,15 @@ function FormRegistration() {
     e.preventDefault(); 
     setFormData({...formData, disabledButton: true });
     console.log('formData', formData);
+    
     if (actualSection === 0) {
       console.log(`VERIFICAR NO BANCO SE JÁ EXISTE O RG ${formData.rg} CADASTRADO`);
     }
     
 
     if (actualSection === sections.length-1) {
-      const { name, rg, cpf, email } = formData; //IR ADICIONANDO CAMPOS QDE CADA SECTION QUE SERÃO SALVOS
-      const dataToSave = { name, rg, cpf, email };
+      const { name, rg, cpf, email, privateSpace, registrationFee } = formData; //IR ADICIONANDO CAMPOS QDE CADA SECTION QUE SERÃO SALVOS
+      const dataToSave = { name, rg, cpf, email, privateSpace, registrationFee };
       console.log('DADOS A SEREM SALVOS NO BANCO', dataToSave);
     }
 
