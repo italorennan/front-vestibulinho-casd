@@ -3,7 +3,7 @@ import { Container } from './styles';
 import FormRegistrationContext from '../../pages/FormRegistration/context';
 
 function PrivateSpacesInputs() {
-  const [privateSpaceData, setPrivateSpaceData] = useState({});
+  const [privateSpaceData, setPrivateSpaceData] = useState({ privateSpace: '' });
   const { formData, setFormData } = useContext(FormRegistrationContext);
 
   useEffect(() => setFormData({...formData, ...privateSpaceData}), [privateSpaceData, setFormData, setPrivateSpaceData]);
@@ -15,15 +15,14 @@ function PrivateSpacesInputs() {
       <span>Para isso, você pode optar por realizar autodeclaração como branco, preto, pardo, amarelo ou indígena.</span>
       <span>Além disso, no ato da Entrevista Socioeconômica haverá uma formalização da autodeclaração, assinada pelo candidato ou pelo responsável em caso de candidato menor de idade.</span>
    
-      <label htmlFor="name">Nome completo *</label>
-      <input 
-        type="text" 
-        id="name" 
-        onChange={e => {
-          const newData = { teste: e.target.value };
-          setPrivateSpaceData(newData);
-        }}
-      />
+      <label htmlFor="privateSpace">Como você se autodeclara? *</label>
+      <select id="privateSpace" value={privateSpaceData} onChange={e => setPrivateSpaceData(e.target.value)}>
+        <option value="Amarelo(a)">Amarelo(a)</option>
+        <option value="Branco(a)">Branco(a)</option>
+        <option value="Indígena">Indígena</option>
+        <option value="Pardo(a)">Pardo(a)</option>
+        <option value="Preto(a)">Preto(a)</option>
+      </select>
     </Container>
   );
 }

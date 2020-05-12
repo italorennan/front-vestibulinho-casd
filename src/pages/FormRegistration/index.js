@@ -7,7 +7,7 @@ import PrivateSpacesInputs from '../../sections/PrivateSpacesInputs';
 import api from '../../services/api';
 
 function FormRegistration() {
-  const [actualSection, setActualSection] = useState(0);
+  const [actualSection, setActualSection] = useState(1);
   const [formData, setFormData] = useState({});
   const [hasRGCandidate, setHasRGCandidate] = useState(false);
 
