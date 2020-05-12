@@ -8,6 +8,22 @@ function InitialDataInputs() {
 
   useEffect(() => setFormData(initialData), [initialData, setFormData, setInitialData]);
 
+  function handleValidateRG(rgValue) {
+    // FAZER A VERIFICAÇÃO DO RG -- salvar no estado só depois de verificado
+    // -- SE PASSOU NA VERIFICAÇÃO
+    setInitialData({...initialData, rg: rgValue });
+    // - SE NAO PASSOU NA VERIFICACAO !!!
+    // ------ apagar o valor salvo em rg: delete initialData.rg
+  }
+
+  function handleValidateCPF(cpfValue) {
+    // FAZER A VERIFICAÇÃO DO CPF -- salvar no estado só depois de verificado
+    // -- SE PASSOU NA VERIFICAÇÃO
+    setInitialData({...initialData, cpf: cpfValue });
+    // - SE NAO PASSOU NA VERIFICACAO !!!
+    // ------ apagar o valor salvo em cpf: delete initialData.cpf
+  }
+
   return (
     <Container>
       <label htmlFor="name">Nome completo *</label>
@@ -20,30 +36,35 @@ function InitialDataInputs() {
         }}
       />
       <label htmlFor="rg">RG *</label>
-      <input 
-        type="text" //implementar validação/padronização de rg
+      <input
+        type="text"
         id="rg" 
-        onChange={e => {
-          const newData = {...initialData, rg: e.target.value };
-          setInitialData(newData);
-        }}
+        onChange={e => handleValidateRG(e.target.value)}
       />
       <label htmlFor="cpf">CPF</label>
-      <input 
-        type="number" //implementar validação de cpf
+      <input
+        type="number"
         id="cpf" 
-        onChange={e => {
-          const newData = {...initialData, cpf: e.target.value };
-          setInitialData(newData);
-        }}
+        onChange={e => handleValidateCPF(e.target.value)}
       />
       <label htmlFor="email">E-mail *</label>
       <input 
         type="email"
         id="email" 
         onChange={e => {
-          const newData = {...initialData, email: e.target.value };
-          setInitialData(newData);
+          const email = e.target.value;
+          const emailVerified = initialData.emailConfirmed ? email === initialData.emailConfirmed : false;
+          setInitialData({...initialData, email, emailVerified })
+        }}
+      />
+      <label htmlFor="email">Confirmar e-mail *</label>
+      <input 
+        type="email"
+        id="emailToConfirm" 
+        onChange={e => {
+          const emailConfirmed = e.target.value;
+          const emailVerified = initialData.email ? emailConfirmed === initialData.email : false;
+          setInitialData({...initialData, emailConfirmed, emailVerified });
         }}
       />
     </Container>
