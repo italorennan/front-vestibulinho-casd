@@ -26,6 +26,7 @@ function InitialDataInputs() {
 
   return (
     <Container>
+      <h3>Dados iniciais</h3>
       <label htmlFor="name">Nome completo *</label>
       <input 
         type="text" 
