@@ -7,7 +7,7 @@ import PrivateSpacesInputs from '../../sections/PrivateSpacesInputs';
 import api from '../../services/api';
 
 function FormRegistration() {
-  const [actualSection, setActualSection] = useState(1);
+  const [actualSection, setActualSection] = useState(0);
   const [formData, setFormData] = useState({});
   const [hasRGCandidate, setHasRGCandidate] = useState(false);
 
@@ -15,21 +15,31 @@ function FormRegistration() {
 
   useEffect(() => {
     if (formData.disabledButton && formData.disabledButton === true) {
-      if (formData.name && formData.name.length > 5
+      if (actualSection === 0 
+          && formData.name && formData.name.length > 5
           && formData.rg //rg já validado
           && formData.cpf //cpf já validado
           && formData.emailVerified
       ) {
-        setFormData({...formData, disabledButton: false });
+        setFormData({...formData, disabledButton: false }); 
       } 
+      // ALTERAR AQ CASO MUDE A ORDEM DOS SECTIONS
+      if (actualSection === 1 && formData.privateSpace && formData.privateSpace !== "") {
+        setFormData({...formData, disabledButton: false });
+      }
     } else {
-      if (!formData.name
+      if (actualSection === 0 
+        && (!formData.name
         || !formData.rg //rg já validado
         || !formData.cpf //cpf já validado
-        || !formData.emailVerified
+        || !formData.emailVerified)
       ) {
         setFormData({...formData, disabledButton: true });
       } 
+      // ALTERAR AQ CASO MUDE A ORDEM DOS SECTIONS
+      if (actualSection === 1 && formData.privateSpace.length === 0) {
+        setFormData({...formData, disabledButton: true });
+      }
     }
   }, [formData]);
 
@@ -45,6 +55,7 @@ function FormRegistration() {
 
   async function handleSubmit(e) {
     e.preventDefault(); 
+    setFormData({...formData, disabledButton: true });
     console.log('formData', formData);
     if (actualSection === 0) {
       console.log(`VERIFICAR NO BANCO SE JÁ EXISTE O RG ${formData.rg} CADASTRADO`);

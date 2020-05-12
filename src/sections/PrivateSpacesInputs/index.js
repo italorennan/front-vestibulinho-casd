@@ -3,10 +3,14 @@ import { Container } from './styles';
 import FormRegistrationContext from '../../pages/FormRegistration/context';
 
 function PrivateSpacesInputs() {
-  const [privateSpaceData, setPrivateSpaceData] = useState({ privateSpace: '' });
+  const [privateSpace, setPrivateSpace] = useState('');
   const { formData, setFormData } = useContext(FormRegistrationContext);
 
-  useEffect(() => setFormData({...formData, ...privateSpaceData}), [privateSpaceData, setFormData, setPrivateSpaceData]);
+  useEffect(() => setFormData({...formData, privateSpace}), [privateSpace, setFormData, setPrivateSpace]);
+
+  function handleSelect(e) {
+    setPrivateSpace(e.target.value);
+  }
 
   return (
     <Container>
@@ -16,7 +20,8 @@ function PrivateSpacesInputs() {
       <span>Além disso, no ato da Entrevista Socioeconômica haverá uma formalização da autodeclaração, assinada pelo candidato ou pelo responsável em caso de candidato menor de idade.</span>
    
       <label htmlFor="privateSpace">Como você se autodeclara? *</label>
-      <select id="privateSpace" value={privateSpaceData} onChange={e => setPrivateSpaceData(e.target.value)}>
+      <select id="privateSpace" value={privateSpace} onChange={handleSelect}>
+        <option value=""></option>
         <option value="Amarelo(a)">Amarelo(a)</option>
         <option value="Branco(a)">Branco(a)</option>
         <option value="Indígena">Indígena</option>
