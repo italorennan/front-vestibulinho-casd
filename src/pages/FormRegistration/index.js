@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import FormRegistrationContext from './context';
 import { Container } from './styles';
-import InitialDataInputs from '../../sections/InitialDataInputs';
+import PersonalDataInputs from '../../sections/PersonalData';
 import PrivateSpacesInputs from '../../sections/PrivateSpacesInputs';
 import RegistrationFeeInputs from '../../sections/RegistrationFeeInputs';
 
@@ -12,17 +12,39 @@ function FormRegistration() {
   const [formData, setFormData] = useState({});
   const [hasRGCandidate, setHasRGCandidate] = useState(false);
 
-  const sections = [<InitialDataInputs />, <PrivateSpacesInputs />, <RegistrationFeeInputs />];
+  const sections = [<PersonalDataInputs />, <PrivateSpacesInputs />, <RegistrationFeeInputs />];
 
   useEffect(() => {
     if (formData.disabledButton && formData.disabledButton === true) {
-      if (actualSection === 0 
-          && formData.name && formData.name.length > 5
-          && formData.rg //rg já validado
-          && formData.cpf //cpf já validado
-          && formData.emailVerified
+      if (actualSection === 0 // Validações de campos normais obrigatórios
+          && formData.bairro
+          && formData.cep
+          && formData.cidade
+          && formData.cpf
+          && formData.dataNascimento
+          && formData.email && formData.email !== "erro"
+          && formData.endereco
+          && formData.escola
+          && formData.escolaridade
+          && formData.estado
+          && formData.formaPS
+          && formData.nome
+          && formData.nomeResponsavel
+          && formData.parentesco
+          && formData.rg
+          && formData.seNecessidadeEspecial
+          && formData.sexo
+          && formData.telefone1
+          // telefone2 --> dado não obrigatório
+          && formData.tipoEscola
       ) {
-        setFormData({...formData, disabledButton: false }); 
+        // Validações de campos condicionais obrigatórios
+          if (!((formData.escola === "Outra" && !formData.outraEscola)
+              || (formData.formaPS === "outro" && !formData.outraForma)
+              || (formData.parentesco === "Outro" && !formData.outroParentesco)
+              || (formData.seNecessidadeEspecial === "Sim" && !formData.qualNecessidade))) {
+                setFormData({...formData, disabledButton: false }); 
+          }
       } 
       // ALTERAR AQ CASO MUDE A ORDEM DOS SECTIONS
       if (actualSection === 1 && formData.privateSpace && formData.privateSpace !== "") {
@@ -33,18 +55,37 @@ function FormRegistration() {
       }
     } else {
       if (actualSection === 0 
-        && (!formData.name
-        || !formData.rg //rg já validado
-        || !formData.cpf //cpf já validado
-        || !formData.emailVerified)
+        && (!formData.bairro
+        || !formData.cep
+        || !formData.cidade
+        || !formData.cpf
+        || !formData.dataNascimento
+        || !formData.email || formData.email === "erro"
+        || !formData.endereco
+        || !formData.escola
+        || !formData.escolaridade
+        || !formData.estado
+        || !formData.formaPS
+        || !formData.nome
+        || !formData.nomeResponsavel
+        || !formData.parentesco
+        || !formData.rg
+        || !formData.seNecessidadeEspecial
+        || !formData.sexo
+        || !formData.telefone1
+        || !formData.tipoEscola
+        || (formData.escola === "Outra" && !formData.outraEscola)
+        || (formData.formaPS === "outro" && !formData.outraForma)
+        || (formData.parentesco === "Outro" && !formData.outroParentesco)
+        || (formData.seNecessidadeEspecial === "Sim" && !formData.qualNecessidade))
       ) {
         setFormData({...formData, disabledButton: true });
       } 
       // ALTERAR AQ CASO MUDE A ORDEM DOS SECTIONS
-      if (actualSection === 1 && formData.privateSpace.length === 0) {
+      if (actualSection === 1 && formData.privateSpace === "") {
         setFormData({...formData, disabledButton: true });
       }
-      if (actualSection === 2 && formData.registrationFee.length === 0) {
+      if (actualSection === 2 && formData.registrationFee === "") {
         setFormData({...formData, disabledButton: true });
       }
     }
