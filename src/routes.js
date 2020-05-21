@@ -8,8 +8,8 @@ export default function Routes() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" exact component={FormInfos} />
-        <Route path="/inscricao" component={FormRegistration} />
+        {/* <Route path="/" exact component={FormInfos} /> */}
+        {/* <Route path="/inscricao" component={FormRegistration} /> */}
       </Switch>
     </BrowserRouter>
   );

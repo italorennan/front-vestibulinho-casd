@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import FormRegistrationContext from './context';
 import { Container } from './styles';
+import InfoForm from '../../sections/InfoForm';
 import PersonalDataInputs from '../../sections/PersonalData';
 import PrivateSpacesInputs from '../../sections/PrivateSpacesInputs';
 import RegistrationFeeInputs from '../../sections/RegistrationFeeInputs';
 
 import api from '../../services/api';
 
-function FormRegistration() {
+function FormRegistration({ idCourse }) {
   const [actualSection, setActualSection] = useState(0);
   const [formData, setFormData] = useState({});
   const [hasRGCandidate, setHasRGCandidate] = useState(false);
 
-  const sections = [<PersonalDataInputs />, <PrivateSpacesInputs />, <RegistrationFeeInputs />];
+  const sections = [
+                    <InfoForm idCourse={idCourse} />, 
+                    <PersonalDataInputs />, 
+                    <PrivateSpacesInputs />, 
+                    <RegistrationFeeInputs />
+                  ];
 
   useEffect(() => {
+    if (actualSection === 0) formData.disabledButton = true;
     if (formData.disabledButton && formData.disabledButton === true) {
-      if (actualSection === 0 // Validações de campos normais obrigatórios
+      if (actualSection === 1 // Validações de campos normais obrigatórios
           && formData.bairro
           && formData.cep
           && formData.cidade
@@ -46,15 +53,14 @@ function FormRegistration() {
                 setFormData({...formData, disabledButton: false }); 
           }
       } 
-      // ALTERAR AQ CASO MUDE A ORDEM DOS SECTIONS
-      if (actualSection === 1 && formData.privateSpace && formData.privateSpace !== "") {
+      if (actualSection === 2 && formData.privateSpace && formData.privateSpace !== "") {
         setFormData({...formData, disabledButton: false });
       }
-      if (actualSection === 2 && formData.registrationFee && formData.registrationFe !== "") {
+      if (actualSection === 3 && formData.registrationFee && formData.registrationFe !== "") {
         setFormData({...formData, disabledButton: false });
       }
     } else {
-      if (actualSection === 0 
+      if (actualSection === 1 
         && (!formData.bairro
         || !formData.cep
         || !formData.cidade
@@ -81,11 +87,10 @@ function FormRegistration() {
       ) {
         setFormData({...formData, disabledButton: true });
       } 
-      // ALTERAR AQ CASO MUDE A ORDEM DOS SECTIONS
-      if (actualSection === 1 && formData.privateSpace === "") {
+      if (actualSection === 2 && formData.privateSpace === "") {
         setFormData({...formData, disabledButton: true });
       }
-      if (actualSection === 2 && formData.registrationFee === "") {
+      if (actualSection === 3 && formData.registrationFee === "") {
         setFormData({...formData, disabledButton: true });
       }
     }
@@ -112,11 +117,10 @@ function FormRegistration() {
     
 
     if (actualSection === sections.length-1) {
-      const { name, rg, cpf, email, privateSpace, registrationFee } = formData; //IR ADICIONANDO CAMPOS QDE CADA SECTION QUE SERÃO SALVOS
+      const { name, rg, cpf, email, privateSpace, registrationFee } = formData; // ------- [TODO] IR ADICIONANDO CAMPOS QDE CADA SECTION QUE SERÃO SALVOS
       const dataToSave = { name, rg, cpf, email, privateSpace, registrationFee };
       console.log('DADOS A SEREM SALVOS NO BANCO', dataToSave);
     }
-
 
     // const respGET = await api.get(`/candidate/checkCandidate?rg=${dataToSave.rg}`);
     // if (respGET.data.candidateBool) { //existe cadastro com esse rg
