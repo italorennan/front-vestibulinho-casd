@@ -22,9 +22,11 @@ function RegistrationFeeInputs() {
       <label htmlFor="registrationFee">Solicitação de isenção *</label>
       <select id="registrationFee" value={registrationFee} onChange={handleSelect}>
         <option value=""></option>
-        <option value="0">QUERO receber isenção da taxa de inscrição, ou seja, NÃO QUERO fazer o pagamento da taxa</option>
-        <option value="1">NÃO QUERO receber isenção da taxa de inscrição, ou seja, QUERO fazer o pagamento da taxa</option>
+        <option value="1">QUERO receber isenção da taxa de inscrição, ou seja, NÃO QUERO fazer o pagamento da taxa</option>
+        <option value="0">NÃO QUERO receber isenção da taxa de inscrição, ou seja, QUERO fazer o pagamento da taxa</option>
       </select>
+
+      { console.log(formData) }
     </Container>
   );
 }
