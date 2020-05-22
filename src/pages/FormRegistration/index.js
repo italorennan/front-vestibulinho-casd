@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import FormRegistrationContext from './context';
 import { Container } from './styles';
 import InfoForm from '../../sections/InfoForm';
-import PersonalDataInputs from '../../sections/PersonalData';
+import InitialDataInputs from '../../sections/InitialDataInputs';
+import PersonalDataInputs from '../../sections/PersonalDataInputs';
 import PrivateSpacesInputs from '../../sections/PrivateSpacesInputs';
 import RegistrationFeeInputs from '../../sections/RegistrationFeeInputs';
 
@@ -15,7 +16,8 @@ function FormRegistration({ idCourse }) {
 
   const sections = [
                     <InfoForm idCourse={idCourse} />, 
-                    <PersonalDataInputs />, 
+                    <InitialDataInputs idCourse={idCourse}/>,
+                    <PersonalDataInputs idCourse={idCourse}/>, 
                     <PrivateSpacesInputs />, 
                     <RegistrationFeeInputs />
                   ];
@@ -23,74 +25,85 @@ function FormRegistration({ idCourse }) {
   useEffect(() => {
     if (actualSection === 0) formData.disabledButton = true;
     if (formData.disabledButton && formData.disabledButton === true) {
-      if (actualSection === 1 // Validações de campos normais obrigatórios
-          && formData.bairro
+      if (actualSection === 1
+          && !(!formData.cpf && idCourse == "casdvest") && formData.cpf !== "inval" // CPF obrigatório apenas para CASDvest
+          && formData.email && formData.email !== "error"
+          && formData.name
+          && formData.rg) {
+            setFormData({...formData, disabledButton: false });
+          }
+      
+      if (actualSection === 2 // Validações de campos normais obrigatórios
+          && formData.birthDate
           && formData.cep
-          && formData.cidade
-          && formData.cpf
-          && formData.dataNascimento
-          && formData.email && formData.email !== "erro"
-          && formData.endereco
-          && formData.escola
-          && formData.escolaridade
-          && formData.estado
-          && formData.formaPS
-          && formData.nome
-          && formData.nomeResponsavel
-          && formData.parentesco
-          && formData.rg
-          && formData.seNecessidadeEspecial
-          && formData.sexo
-          && formData.telefone1
-          // telefone2 --> dado não obrigatório
-          && formData.tipoEscola
+          && formData.city
+          // complementAddress --> dado não obrigatório
+          && formData.gender
+          && formData.ifSpecialNecessity
+          && formData.kindSchool
+          && formData.kinship
+          && formData.neighborhood
+          && formData.numberStreet
+          && formData.phone1
+          // phone2 --> dado não obrigatório
+          && formData.responsibleName
+          && formData.school
+          && formData.schooling
+          && formData.state
+          && formData.street
+          && formData.wayPS
       ) {
         // Validações de campos condicionais obrigatórios
-          if (!((formData.escola === "Outra" && !formData.outraEscola)
-              || (formData.formaPS === "outro" && !formData.outraForma)
-              || (formData.parentesco === "Outro" && !formData.outroParentesco)
-              || (formData.seNecessidadeEspecial === "Sim" && !formData.qualNecessidade))) {
+          if (!((formData.school === "Outra" && !formData.otherSchool)
+              || (formData.wayPS === "outro" && !formData.otherWay)
+              || (formData.kinship === "Outro" && !formData.otherKinship)
+              || (formData.ifSpecialNecessity === "Sim" && !formData.whichNecessity))) {
                 setFormData({...formData, disabledButton: false }); 
           }
       } 
-      if (actualSection === 2 && formData.privateSpace && formData.privateSpace !== "") {
+      if (actualSection === 3 && formData.privateSpace && formData.privateSpace !== "") {
         setFormData({...formData, disabledButton: false });
       }
-      if (actualSection === 3 && formData.registrationFee && formData.registrationFe !== "") {
+      if (actualSection === 4 && formData.registrationFee && formData.registrationFe !== "") {
         setFormData({...formData, disabledButton: false });
       }
     } else {
-      if (actualSection === 1 
-        && (!formData.bairro
+      if (actualSection === 1
+        && ((!formData.cpf && idCourse == "casdvest") || formData.cpf === "inval"
+        || !formData.email || formData.email === "error"
+        || !formData.name
+        || !formData.rg)
+      ) {
+        setFormData({...formData, disabledButton: true });
+      }
+      if (actualSection === 2
+        && (!formData.birthDate
         || !formData.cep
-        || !formData.cidade
-        || !formData.cpf
-        || !formData.dataNascimento
-        || !formData.email || formData.email === "erro"
-        || !formData.endereco
-        || !formData.escola
-        || !formData.escolaridade
-        || !formData.estado
-        || !formData.formaPS
-        || !formData.nome
-        || !formData.nomeResponsavel
-        || !formData.parentesco
-        || !formData.rg
-        || !formData.seNecessidadeEspecial
-        || !formData.sexo
-        || !formData.telefone1
-        || !formData.tipoEscola
-        || (formData.escola === "Outra" && !formData.outraEscola)
-        || (formData.formaPS === "outro" && !formData.outraForma)
-        || (formData.parentesco === "Outro" && !formData.outroParentesco)
-        || (formData.seNecessidadeEspecial === "Sim" && !formData.qualNecessidade))
+        || !formData.city
+        || !formData.gender
+        || !formData.ifSpecialNecessity
+        || !formData.kindSchool
+        || !formData.kinship
+        || !formData.neighborhood
+        || !formData.numberStreet
+        || !formData.phone1
+        || !formData.responsibleName
+        || !formData.school
+        || !formData.schooling
+        || !formData.state
+        || !formData.street
+        || !formData.wayPS
+        || (formData.school === "Outra" && !formData.otherSchool)
+        || (formData.wayPS === "outro" && !formData.otherWay)
+        || (formData.kinship === "Outro" && !formData.otherKinship)
+        || (formData.ifSpecialNecessity === "Sim" && !formData.whichNecessity))
       ) {
         setFormData({...formData, disabledButton: true });
       } 
-      if (actualSection === 2 && formData.privateSpace === "") {
+      if (actualSection === 3 && formData.privateSpace === "") {
         setFormData({...formData, disabledButton: true });
       }
-      if (actualSection === 3 && formData.registrationFee === "") {
+      if (actualSection === 4 && formData.registrationFee === "") {
         setFormData({...formData, disabledButton: true });
       }
     }
