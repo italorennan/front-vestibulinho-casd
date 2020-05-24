@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Container } from './styles';
+import { Container, ErrorMessage } from './styles';
 import FormRegistrationContext from '../../pages/FormRegistration/context';
 
 function PersonalDataInputs() {
@@ -241,7 +241,7 @@ function PersonalDataInputs() {
                 type="text" id="nome" required
                 onChange={handleNome}
             />
-            <p id="errorNome" className="errorMsg">{errors.nome}</p>
+            <ErrorMessage>{errors.nome}</ErrorMessage>
 
             <label htmlFor="rg">RG *</label>
             <p>Escreva apenas os números.</p>
@@ -249,7 +249,7 @@ function PersonalDataInputs() {
                 type="text" id="rg" required
                 onChange={handleRG}
             />
-            <p id="errorRG" className="errorMsg">{errors.rg}</p>
+            <ErrorMessage>{errors.rg}</ErrorMessage>
             
             <label htmlFor="cpf">CPF *</label>
             <p>Escreva apenas os números.</p>
@@ -257,7 +257,7 @@ function PersonalDataInputs() {
                 type="number" id="cpf" required
                 onChange={handleCPF}
             />
-            <p id="errorCPF" className="errorMsg">{errors.cpf}</p>
+            <ErrorMessage>{errors.cpf}</ErrorMessage>
 
             <label htmlFor="sexo">Sexo *</label>
             <select id="sexo" required
@@ -266,7 +266,7 @@ function PersonalDataInputs() {
                 <option value="Feminino">Feminino</option>
                 <option value="Masculino">Masculino</option>
             </select>
-            <p id="errorSexo" className="errorMsg">{errors.sexo}</p>
+            <ErrorMessage>{errors.sexo}</ErrorMessage>
 
             <label htmlFor="dataNascimento">Data de nascimento *</label>
             <p>Escreva no formato DD/MM/AAAA.</p>
@@ -274,7 +274,7 @@ function PersonalDataInputs() {
                 type="text" id="dataNascimento" required placeholder="DD/MM/AAAA"
                 onChange={handleData}
             />
-            <p id="errorNascimento" className="errorMsg">{errors.nascimento}</p>
+            <ErrorMessage>{errors.nascimento}</ErrorMessage>
 
             <label htmlFor="nomeResponsavel">Nome de um responsável *</label>
             <p>Conforme consta no documento de identidade. Escreva cada nome com a primeira letra maiúscula e as outras minúsculas, sem acentos. Use um espaço entre cada nome.</p>
@@ -282,7 +282,7 @@ function PersonalDataInputs() {
                 type="text" id="nomeResponsavel" required
                 onChange={handleNomeResponsavel}
             />
-            <p id="errorResponsavel" className="errorMsg">{errors.responsavel}</p>
+            <ErrorMessage>{errors.responsavel}</ErrorMessage>
 
             <label htmlFor="parentesco">Parentesco do responsável *</label>
             <select id="parentesco" required
@@ -298,14 +298,14 @@ function PersonalDataInputs() {
                 <option value="Irmão">Irmão</option>
                 <option value="Outro">Outro</option>
             </select>
-            <p id="errorParentesco" className="errorMsg">{errors.parentesco}</p>
+            <ErrorMessage>{errors.parentesco}</ErrorMessage>
 
             <label hidden htmlFor="outroParentesco" id="labelParentesco">Outro parentesco: *</label>
             <input
                 type="hidden" id="outroParentesco"
                 onChange={e => {const newData = {...personalData, outroParentesco: e.target.value}; setPersonalData(newData);}}
             />
-            <p id="errorOutroParentesco" className="errorMsg">{errors.outroparentesco}</p>
+            <ErrorMessage>{errors.outroparentesco}</ErrorMessage>
 
             <label htmlFor="telefone1">Telefone 1 *</label>
             <p>Insira apenas os números, incluindo DDD.</p>
@@ -313,7 +313,7 @@ function PersonalDataInputs() {
                 type="text" id="telefone1" required
                 onChange={handleTelefone1}
             />
-            <p id="errorTelefone1" className="errorMsg">{errors.telefone1}</p>
+            <ErrorMessage>{errors.telefone1}</ErrorMessage>
 
             <label htmlFor="telefone2">Telefone 2</label>
             <p>Insira apenas os números, incluindo DDD.</p>
@@ -321,21 +321,21 @@ function PersonalDataInputs() {
                 type="text" id="telefone2"
                 onChange={handleTelefone2}
             />
-            <p id="errorTelefone2" className="errorMsg">{errors.telefone2}</p>
+            <ErrorMessage>{errors.telefone2}</ErrorMessage>
 
             <label htmlFor="email">E-mail *</label>
             <input 
                 type="email" id="email" required
                 onChange={handleEmail}
             />
-            <p id="errorEmail" className="errorMsg">{errors.email}</p>
+            <ErrorMessage>{errors.email}</ErrorMessage>
 
             <label htmlFor="confirmarEmail">Confirmar e-mail *</label>
             <input 
                 type="email" id="confirmarEmail" required
                 onChange={handleConfirmarEmail}
             />
-            <p id="errorConfirmarEmail" className="errorMsg">{errors.confirmaremail}</p>
+            <ErrorMessage>{errors.confirmaremail}</ErrorMessage>
 
             <label htmlFor="endereco">Endereço *</label>
             <p>Rua, número e eventuais complementos (apartamento, bloco, ...).</p>
@@ -343,14 +343,14 @@ function PersonalDataInputs() {
                 type="name" id="endereco" required
                 onChange={e => {const newData = {...personalData, endereco: e.target.value}; setPersonalData(newData);}}
             />
-            <p id="errorEndereco" className="errorMsg">{errors.endereco}</p>
+            <ErrorMessage>{errors.endereco}</ErrorMessage>
 
             <label htmlFor="bairro">Bairro *</label>    
             <input
                 type="name" id="bairro" required
                 onChange={e => {const newData = {...personalData, bairro: e.target.value}; setPersonalData(newData);}}
             />
-            <p id="errorBairro" className="errorMsg">{errors.bairro}</p>
+            <ErrorMessage>{errors.bairro}</ErrorMessage>
 
             <label htmlFor="cep">CEP *</label>
             <p>Insira apenas os números.</p>
@@ -358,14 +358,14 @@ function PersonalDataInputs() {
                 type="number" id="cep" required
                 onChange={handleCEP}
             />
-            <p id="errorCep" className="errorMsg">{errors.cep}</p>
+            <ErrorMessage>{errors.cep}</ErrorMessage>
 
             <label htmlFor="cidade">Cidade *</label>
             <input
                 type="name" id="cidade" required
                 onChange={e => {const newData = {...personalData, cidade: e.target.value}; setPersonalData(newData);}}
             />
-            <p id="errorCidade" className="errorMsg">{errors.cidade}</p>
+            <ErrorMessage>{errors.cidade}</ErrorMessage>
 
             <label htmlFor="estado">Estado *</label>
             <select id="estado" required
@@ -399,7 +399,7 @@ function PersonalDataInputs() {
                 <option value="SP">SP</option>
                 <option value="TO">TO</option>
             </select>
-            <p id="errorEstado" className="errorMsg">{errors.estado}</p>
+            <ErrorMessage>{errors.estado}</ErrorMessage>
 
             <label htmlFor="necessidadeEspecial">Você possui alguma necessidade especial? *</label>
             <select id="necessidadeEspecial" required
@@ -408,14 +408,14 @@ function PersonalDataInputs() {
                 <option value="Não">Não</option>
                 <option value="Sim">Sim</option>
             </select>
-            <p id="errorNecessidadeEspecial" className="errorMsg">{errors.necessidadeespecial}</p>
+            <ErrorMessage>{errors.necessidadeespecial}</ErrorMessage>
 
             <label hidden htmlFor="qualNecessidade" id="labelNecessidade">Qual sua necessidade especial? *</label>
             <input
                 type="hidden" id="qualNecessidade"
                 onChange={e => {const newData = {...personalData, qualNecessidade: e.target.value}; setPersonalData(newData);}}
             />
-            <p id="errorQualNecessidade" className="errorMsg">{errors.qualnecessidade}</p>
+            <ErrorMessage>{errors.qualnecessidade}</ErrorMessage>
 
             <label htmlFor="escolaridade">Escolaridade *</label>
             <p>O Processo Seletivo do CASDvest destina-se a alunos que já tenham concluído ou que concluirão o Ensino Médio em 2020.</p>
@@ -426,7 +426,7 @@ function PersonalDataInputs() {
                 <option value="3">Cursando o 3º ano do Ensino Médio em 2020</option>
                 <option value="2">Cursando o 2º ano do Ensino Médio em 2020</option>
             </select>
-            <p id="errorEscolaridade" className="errorMsg">{errors.escolaridade}</p>
+            <ErrorMessage>{errors.escolaridade}</ErrorMessage>
 
             <label htmlFor="tipoEscola">Tipo de escola *</label>
             <p>Considere a escola em que você concluiu ou concluirá o Ensino Médio.</p>
@@ -438,7 +438,7 @@ function PersonalDataInputs() {
                 <option value="PM">Pública Municipal</option>
                 <option value="PV">Privada</option>
             </select>
-            <p id="errorTipoEscola" className="errorMsg">{errors.tipoescola}</p>
+            <ErrorMessage>{errors.tipoescola}</ErrorMessage>
 
             <label htmlFor="escola">Nome da escola *</label>
             <p>Escolha a escola em que você concluiu ou concluirá o Ensino Médio.</p>
@@ -530,14 +530,14 @@ function PersonalDataInputs() {
                 <option value="ZILAH FERREIRA VIAGI PASSARELLI DE CAMPOS PROFESSORA">ZILAH FERREIRA VIAGI PASSARELLI DE CAMPOS PROFESSORA</option>
                 <option value="Outra">Outra</option>
             </select>
-            <p id="errorEscola" className="errorMsg">{errors.escola}</p>
+            <ErrorMessage>{errors.escola}</ErrorMessage>
 
             <label hidden htmlFor="outraEscola" id="labelEscola">Outra escola: *</label>
             <input
                 type="hidden" id="outraEscola"
                 onChange={e => {const newData = {...personalData, outraEscola: e.target.value}; setPersonalData(newData);}}
             />
-            <p id="errorOutraEscola" className="errorMsg">{errors.outraescola}</p>
+            <ErrorMessage>{errors.outraescola}</ErrorMessage>
 
             <label htmlFor="conhecimentoPS">Como você tomou conhecimento do Processo Seletivo do CASDvest? *</label>
             <select id="conhecimentoPS" required
@@ -553,14 +553,14 @@ function PersonalDataInputs() {
                 <option value="visita">Visita à escola</option>
                 <option value="outro">Outro</option>
             </select>
-            <p id="errorConhecimentoPS" className="errorMsg">{errors.conhecimentopS}</p>
+            <ErrorMessage>{errors.conhecimentopS}</ErrorMessage>
 
             <label hidden htmlFor="outraForma" id="labelForma">Outra forma: *</label>
             <input
                 type="hidden" id="outraForma"
                 onChange={e => {const newData = {...personalData, outraForma: e.target.value}; setPersonalData(newData);}}
             />
-            <p id="errorOutraForma" className="errorMsg">{errors.outraforma}</p>
+            <ErrorMessage>{errors.outraforma}</ErrorMessage>
 
             { console.log(formData) }
         </Container>
