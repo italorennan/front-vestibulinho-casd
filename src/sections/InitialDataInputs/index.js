@@ -28,11 +28,29 @@ function InitialDataInputs({ idCourse }) {
   /// Se o input obedece padrão, salva no banco de dados
   /// Se não obedece, salva string vazia
 
+  // Função para tratar strings: torna tudo maiúsculo, remove acentos e espaços extras
+  function handleStrings(string) {
+    string = string.toUpperCase();
+
+    var oldChar = [/Á/g, /É/g, /Í/g, /Ó/g, /Ú/g, /Ã/g, /Õ/g, /Ç/g, /[ ]+/g];
+    var newChar = ["A", "E", "I", "O", "U", "A", "O", "C", " "];
+
+    for (var i = 0; i < oldChar.length; i++) {
+      string = string.replace(oldChar[i], newChar[i]);
+    }
+
+    string = string.trim();
+
+    return string;
+  }
+
   // Validação do nome
-  const NomeRegEx = RegExp(/^([A-Z]{1}[a-z]*[ ]{1})+[A-Z]{1}[a-z]*$/);
+  const NomeRegEx = RegExp(/[A-ZÁÉÍÓÚa-záéíóúç]+[ ]+([A-ZÁÉÍÓÚa-záéíóúç]+[ ]*)+/);
   function handleName(e) {
-      if(NomeRegEx.test(e.target.value))
-          setInitialData({...initialData, name: e.target.value});
+      if(NomeRegEx.test(e.target.value)) {
+          var handledName = handleStrings(e.target.value);
+          setInitialData({...initialData, name: handledName});
+      }
       else
           setInitialData({...initialData, name: ""});
   }
@@ -114,7 +132,7 @@ function InitialDataInputs({ idCourse }) {
       <h3>Dados iniciais</h3>
       
       <label htmlFor="name">Nome completo *</label>
-      <p>Conforme consta no documento de identidade. Escreva cada nome com a primeira letra maiúscula e as outras minúsculas, sem acentos. Use um espaço entre cada nome.</p>
+      <p>Conforme consta no documento de identidade.</p>
       <input 
           type="text" id="name" required
           onChange={handleName}

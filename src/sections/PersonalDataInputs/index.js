@@ -271,6 +271,22 @@ function PersonalDataInputs({ idCourse }) {
     useEffect(() => setFormData({...formData, ...personalData}), [personalData, setFormData, setPersonalData]);
     useEffect(() => setPersonalData({...personalData, address: address}), [address, setPersonalData]);
 
+    // Função para tratar strings: torna tudo maiúsculo, remove acentos e espaços extras
+    function handleStrings(string) {
+        string = string.toUpperCase();
+
+        var oldChar = [/Á/g, /É/g, /Í/g, /Ó/g, /Ú/g, /Ã/g, /Õ/g, /Ç/g, /[ ]+/g];
+        var newChar = ["A", "E", "I", "O", "U", "A", "O", "C", " "];
+
+        for (var i = 0; i < oldChar.length; i++) {
+        string = string.replace(oldChar[i], newChar[i]);
+        }
+
+        string = string.trim();
+
+        return string;
+    }
+
     // Estrutura de perguntas com validação por padrão:
     /// const ... = RegExp(...); --> expressão regular que define o padrão
     /// function handle...(e) --> função que lida com a validação
@@ -280,34 +296,65 @@ function PersonalDataInputs({ idCourse }) {
     // Validação da data de nascimento
     const dataRegEx = RegExp(/^[0-9]{2}[/]{1}[0-9]{2}[/]{1}[0-9]{4}$/);
     function handleDate(e) {
-        if(dataRegEx.test(e.target.value))
-            setPersonalData({...personalData, birthDate: e.target.value});
-        else
-            setPersonalData({...personalData, birthDate: ""});
+        var date = e.target.value;
+        var val = false;
+
+        if (dataRegEx.test(date)) {
+            val = true;
+            var day = parseInt(date[0] + date[1]);
+            var month = parseInt(date[3] + date[4]);
+            var year = parseInt(date[6] + date[7] + date[8] + date[9]);
+
+            if (day <= 0 || month <= 0 || month > 12 || year < 1900 || year > 2020) val = false;
+            else if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+                if (day > 31) val = false;
+            }
+            else if (month == 2) {
+                if (year % 4 == 0 && day > 29) val = false;
+                else if (year % 4 != 0 && day > 28) val = false;
+            }
+            else if (day > 30) val = false;
+        }
+
+        if (val) setPersonalData({...personalData, birthDate: date});
+        else setPersonalData({...personalData, birthDate: ""});
     }
 
     // Validação do nome do responsável
-    const NomeRegEx = RegExp(/^([A-Z]{1}[a-z]*[ ]{1})+[A-Z]{1}[a-z]*$/);
+    const NomeRegEx = RegExp(/[A-ZÁÉÍÓÚa-záéíóúç]+[ ]+([A-ZÁÉÍÓÚa-záéíóúç]+[ ]*)+/);
     function handleRelativeName(e) {
-        if(NomeRegEx.test(e.target.value))
-            setPersonalData({...personalData, relativeName: e.target.value});
+        if(NomeRegEx.test(e.target.value)) {
+            var handledName = handleStrings(e.target.value);
+            setPersonalData({...personalData, relativeName: handledName});
+        }
         else
             setPersonalData({...personalData, relativeName: ""});
     }
 
     // Validação dos telefones
-    const telRegEx = RegExp(/^[0-9]{11}$/);
+    const telRegEx1 = RegExp(/^[0-9]{11}$/); // Telefone celular
+    const telRegEx2 = RegExp(/^[0-9]{10}$/); // Telefone fixo
+    function handlePhone(phone) {
+        var telRegEx;
+
+        while(phone[0] == '0') phone = phone.replace('0', ''); // Eliminar 0 do DDD, se houver
+        
+        // Selecionar expressão regular
+        var i = phone[2];
+        if(i == '9') telRegEx = telRegEx1; // Telefone celular
+        else if(i == '2' || i == '3' || i == '4' || i == '5') telRegEx = telRegEx2; // Telefone fixo
+        else return "";
+    
+        if(telRegEx.test(phone)) return phone;
+        else return "";
+    }
     function handlePhone1(e) {
-        if(telRegEx.test(e.target.value))
-            setPersonalData({...personalData, phone1: e.target.value});
-        else
-            setPersonalData({...personalData, phone1: ""});
+        var phone = handlePhone(e.target.value);
+        setPersonalData({...personalData, phone1: phone});
     }
     function handlePhone2(e) {
-        if(telRegEx.test(e.target.value))
-            setPersonalData({...personalData, phone2: e.target.value});
-        else
-            setPersonalData({...personalData, phone2: ""});
+        var phone = handlePhone(e.target.value);
+        setPersonalData({...personalData, phone2: phone});
     }
 
     // Validação do CEP
@@ -425,7 +472,7 @@ function PersonalDataInputs({ idCourse }) {
             />
 
             <label htmlFor="relativeName">Nome de um responsável *</label>
-            <p>Conforme consta no documento de identidade. Escreva cada nome com a primeira letra maiúscula e as outras minúsculas, sem acentos. Use um espaço entre cada nome.</p>
+            <p>Conforme consta no documento de identidade.</p>
             <input 
                 type="text" id="relativeName" required
                 onChange={handleRelativeName}
@@ -449,7 +496,8 @@ function PersonalDataInputs({ idCourse }) {
             <label hidden htmlFor="otherKinship" id="labelKinship">Outro parentesco: *</label>
             <input
                 type="hidden" id="otherKinship"
-                onChange={e => {const newData = {...personalData, otherKinship: e.target.value}; setPersonalData(newData);}}
+                onChange={e => {var handledKinship = handleStrings(e.target.value);
+                                const newData = {...personalData, otherKinship: handledKinship}; setPersonalData(newData);}}
             />
 
             <label htmlFor="phone1">Telefone 1 *</label>
@@ -470,7 +518,8 @@ function PersonalDataInputs({ idCourse }) {
             <p>Nome da rua, avenida ou correspondente (sem número ou complemento).</p> 
             <input 
                 type="name" id="street" required
-                onChange={e => {const newData = {...address, street: e.target.value}; setAddress(newData);}}
+                onChange={e => {var handledStreet = handleStrings(e.target.value);
+                                const newData = {...address, street: handledStreet}; setAddress(newData);}}
             />
             
             <label htmlFor="numberStreet">Número *</label>
@@ -484,13 +533,15 @@ function PersonalDataInputs({ idCourse }) {
             <p>Complemento do endereço, se houver.</p>
             <input 
                 type="text" id="additionalAddress" required
-                onChange={e => {const newData = {...address, additionalAddress: e.target.value}; setAddress(newData);}}
+                onChange={e => {var handledAdditional = handleStrings(e.target.value);
+                                const newData = {...address, additionalAddress: handledAdditional}; setAddress(newData);}}
             />
 
             <label htmlFor="neighborhood">Bairro *</label>    
             <input
                 type="name" id="neighborhood" required
-                onChange={e => {const newData = {...address, neighborhood: e.target.value}; setAddress(newData);}}
+                onChange={e => {var handledNeighborhood = handleStrings(e.target.value);
+                                const newData = {...address, neighborhood: handledNeighborhood}; setAddress(newData);}}
             />
 
             <label htmlFor="cep">CEP *</label>
@@ -503,7 +554,8 @@ function PersonalDataInputs({ idCourse }) {
             <label htmlFor="city">Cidade *</label>
             <input
                 type="name" id="city" required
-                onChange={e => {const newData = {...address, city: e.target.value}; setAddress(newData);}}
+                onChange={e => {var handledCity = handleStrings(e.target.value);
+                                const newData = {...address, city: handledCity}; setAddress(newData);}}
             />
 
             <label htmlFor="state">Estado *</label>
@@ -550,7 +602,8 @@ function PersonalDataInputs({ idCourse }) {
             <label hidden htmlFor="whichNecessity" id="labelSpecialNecessity">Qual sua necessidade especial? *</label>
             <input
                 type="hidden" id="whichNecessity"
-                onChange={e => {const newData = {...personalData, whichNecessity: e.target.value}; setPersonalData(newData);}}
+                onChange={e => {var handledNecessity = handleStrings(e.target.value);
+                                const newData = {...personalData, whichNecessity: handledNecessity}; setPersonalData(newData);}}
             />
 
             <label htmlFor="schooling">Escolaridade *</label>
@@ -584,7 +637,8 @@ function PersonalDataInputs({ idCourse }) {
             <label hidden htmlFor="otherSchool" id="labelSchool">Outra escola: *</label>
             <input
                 type="hidden" id="otherSchool"
-                onChange={e => {const newData = {...personalData, otherSchool: e.target.value}; setPersonalData(newData);}}
+                onChange={e => {var handledSchool = handleStrings(e.target.value);
+                                const newData = {...personalData, otherSchool: handledSchool}; setPersonalData(newData);}}
             />
 
             <label htmlFor="wayPS">{infos.wayLabel}</label>
@@ -605,7 +659,8 @@ function PersonalDataInputs({ idCourse }) {
             <label hidden htmlFor="otherWay" id="labelWay">Outra forma: *</label>
             <input
                 type="hidden" id="otherWay"
-                onChange={e => {const newData = {...personalData, otherWay: e.target.value}; setPersonalData(newData);}}
+                onChange={e => {var handledWay = handleStrings(e.target.value);
+                                const newData = {...personalData, otherWay: handledWay}; setPersonalData(newData);}}
             />
 
             { console.log(formData) }
