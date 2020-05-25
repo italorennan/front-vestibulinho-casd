@@ -263,11 +263,13 @@ const difCourse = [
 
 function PersonalDataInputs({ idCourse }) {
     const [personalData, setPersonalData] = useState({});
+    const [address, setAddress] = useState({});
     const { formData, setFormData } = useContext(FormRegistrationContext);
 
     const infos = difCourse[0][idCourse];
 
     useEffect(() => setFormData({...formData, ...personalData}), [personalData, setFormData, setPersonalData]);
+    useEffect(() => setPersonalData({...personalData, address: address}), [address, setPersonalData]);
 
     // Estrutura de perguntas com validação por padrão:
     /// const ... = RegExp(...); --> expressão regular que define o padrão
@@ -286,11 +288,11 @@ function PersonalDataInputs({ idCourse }) {
 
     // Validação do nome do responsável
     const NomeRegEx = RegExp(/^([A-Z]{1}[a-z]*[ ]{1})+[A-Z]{1}[a-z]*$/);
-    function handleResponsibleName(e) {
+    function handleRelativeName(e) {
         if(NomeRegEx.test(e.target.value))
-            setPersonalData({...personalData, responsibleName: e.target.value});
+            setPersonalData({...personalData, relativeName: e.target.value});
         else
-            setPersonalData({...personalData, responsibleName: ""});
+            setPersonalData({...personalData, relativeName: ""});
     }
 
     // Validação dos telefones
@@ -311,10 +313,12 @@ function PersonalDataInputs({ idCourse }) {
     // Validação do CEP
     const CEPRegEx = RegExp(/^[0-9]{8}$/);
     function handleCEP(e) {
-        if(CEPRegEx.test(e.target.value))
-            setPersonalData({...personalData, cep: e.target.value});
-        else
-            setPersonalData({...personalData, cep: ""});
+        if(CEPRegEx.test(e.target.value)) {
+            setAddress({...address, cep: e.target.value});
+        }
+        else {
+            setAddress({...address, cep: ""});
+        }
     }
 
     // Estrutura de perguntas condicionais
@@ -420,11 +424,11 @@ function PersonalDataInputs({ idCourse }) {
                 onChange={handleDate}
             />
 
-            <label htmlFor="ResponsibleName">Nome de um responsável *</label>
+            <label htmlFor="relativeName">Nome de um responsável *</label>
             <p>Conforme consta no documento de identidade. Escreva cada nome com a primeira letra maiúscula e as outras minúsculas, sem acentos. Use um espaço entre cada nome.</p>
             <input 
-                type="text" id="ResponsibleName" required
-                onChange={handleResponsibleName}
+                type="text" id="relativeName" required
+                onChange={handleRelativeName}
             />
 
             <label htmlFor="kinship">Parentesco do responsável *</label>
@@ -466,27 +470,27 @@ function PersonalDataInputs({ idCourse }) {
             <p>Nome da rua, avenida ou correspondente (sem número ou complemento).</p> 
             <input 
                 type="name" id="street" required
-                onChange={e => {const newData = {...personalData, street: e.target.value}; setPersonalData(newData);}}
+                onChange={e => {const newData = {...address, street: e.target.value}; setAddress(newData);}}
             />
             
             <label htmlFor="numberStreet">Número *</label>
             <p>Número da residência.</p>
             <input 
                 type="number" id="numberStreet" required
-                onChange={e => {const newData = {...personalData, numberStreet: e.target.value}; setPersonalData(newData);}}
+                onChange={e => {const newData = {...address, numberStreet: e.target.value}; setAddress(newData);}}
             />
 
-            <label htmlFor="complementAddress">Complemento</label>
+            <label htmlFor="additionalAddress">Complemento</label>
             <p>Complemento do endereço, se houver.</p>
             <input 
-                type="text" id="complementAddress" required
-                onChange={e => {const newData = {...personalData, complementAddress: e.target.value}; setPersonalData(newData);}}
+                type="text" id="additionalAddress" required
+                onChange={e => {const newData = {...address, additionalAddress: e.target.value}; setAddress(newData);}}
             />
 
             <label htmlFor="neighborhood">Bairro *</label>    
             <input
                 type="name" id="neighborhood" required
-                onChange={e => {const newData = {...personalData, neighborhood: e.target.value}; setPersonalData(newData);}}
+                onChange={e => {const newData = {...address, neighborhood: e.target.value}; setAddress(newData);}}
             />
 
             <label htmlFor="cep">CEP *</label>
@@ -499,12 +503,12 @@ function PersonalDataInputs({ idCourse }) {
             <label htmlFor="city">Cidade *</label>
             <input
                 type="name" id="city" required
-                onChange={e => {const newData = {...personalData, city: e.target.value}; setPersonalData(newData);}}
+                onChange={e => {const newData = {...address, city: e.target.value}; setAddress(newData);}}
             />
 
             <label htmlFor="state">Estado *</label>
             <select id="state" required
-            onChange={e => {const newData = {...personalData, state: e.target.value}; setPersonalData(newData);}}>
+            onChange={e => {const newData = {...address, state: e.target.value}; setAddress(newData);}}>
                 <option value=""></option>
                 <option value="AC">AC</option>
                 <option value="AL">AL</option>

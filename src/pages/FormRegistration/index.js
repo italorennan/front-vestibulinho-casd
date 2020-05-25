@@ -34,33 +34,35 @@ function FormRegistration({ idCourse }) {
           }
       
       if (actualSection === 2 // Validações de campos normais obrigatórios
+          && formData.address
           && formData.birthDate
-          && formData.cep
-          && formData.city
-          // complementAddress --> dado não obrigatório
           && formData.gender
           && formData.ifSpecialNecessity
           && formData.kindSchool
           && formData.kinship
-          && formData.neighborhood
-          && formData.numberStreet
           && formData.phone1
           // phone2 --> dado não obrigatório
-          && formData.responsibleName
+          && formData.relativeName
           && formData.school
           && formData.schooling
-          && formData.state
-          && formData.street
-          && formData.wayPS
-      ) {
-        // Validações de campos condicionais obrigatórios
-          if (!((formData.school === "Outra" && !formData.otherSchool)
-              || (formData.wayPS === "outro" && !formData.otherWay)
-              || (formData.kinship === "Outro" && !formData.otherKinship)
-              || (formData.ifSpecialNecessity === "Sim" && !formData.whichNecessity))) {
-                setFormData({...formData, disabledButton: false }); 
-          }
+          && formData.wayPS) {
+            if (formData.address.cep
+              // address.additionalAddress --> dado não obrigatório
+              && formData.address.city
+              && formData.address.neighborhood
+              && formData.address.numberStreet
+              && formData.address.state
+              && formData.address.street) {
+                // Validações de campos condicionais obrigatórios
+                if (!((formData.school === "Outra" && !formData.otherSchool)
+                    || (formData.wayPS === "outro" && !formData.otherWay)
+                    || (formData.kinship === "Outro" && !formData.otherKinship)
+                    || (formData.ifSpecialNecessity === "Sim" && !formData.whichNecessity))) {
+                      setFormData({...formData, disabledButton: false }); 
+                    }
+            }
       } 
+
       if (actualSection === 3 && formData.privateSpace && formData.privateSpace !== "") {
         setFormData({...formData, disabledButton: false });
       }
@@ -76,29 +78,32 @@ function FormRegistration({ idCourse }) {
       ) {
         setFormData({...formData, disabledButton: true });
       }
-      if (actualSection === 2
-        && (!formData.birthDate
-        || !formData.cep
-        || !formData.city
-        || !formData.gender
-        || !formData.ifSpecialNecessity
-        || !formData.kindSchool
-        || !formData.kinship
-        || !formData.neighborhood
-        || !formData.numberStreet
-        || !formData.phone1
-        || !formData.responsibleName
-        || !formData.school
-        || !formData.schooling
-        || !formData.state
-        || !formData.street
-        || !formData.wayPS
-        || (formData.school === "Outra" && !formData.otherSchool)
-        || (formData.wayPS === "outro" && !formData.otherWay)
-        || (formData.kinship === "Outro" && !formData.otherKinship)
-        || (formData.ifSpecialNecessity === "Sim" && !formData.whichNecessity))
-      ) {
-        setFormData({...formData, disabledButton: true });
+      if (actualSection === 2) {
+        if (!formData.address
+          || !formData.gender
+          || !formData.ifSpecialNecessity
+          || !formData.kindSchool
+          || !formData.kinship
+          || !formData.phone1
+          || !formData.relativeName
+          || !formData.school
+          || !formData.schooling
+          || !formData.wayPS
+          || (formData.school === "Outra" && !formData.otherSchool)
+          || (formData.wayPS === "outro" && !formData.otherWay)
+          || (formData.kinship === "Outro" && !formData.otherKinship)
+          || (formData.ifSpecialNecessity === "Sim" && !formData.whichNecessity)) {
+            setFormData({...formData, disabledButton: true });
+        }
+        else if(!formData.address.cep
+          || !formData.address.city
+          || !formData.address.neighborhood
+          || !formData.address.numberStreet
+          || !formData.address.state
+          || !formData.address.street
+          || !formData.birthDate) {
+            setFormData({...formData, disabledButton: true });
+        }
       } 
       if (actualSection === 3 && formData.privateSpace === "") {
         setFormData({...formData, disabledButton: true });
