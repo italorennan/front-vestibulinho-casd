@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Container } from './styles';
+import { Container } from '../../pages/FormRegistration/styles';
 import FormRegistrationContext from '../../pages/FormRegistration/context';
 
 // Adaptar diferenças entre CASDvest e CASDinho
@@ -7,10 +7,10 @@ import FormRegistrationContext from '../../pages/FormRegistration/context';
 const difCourse = [
   {
     "casdvest": {
-      CPFTitle: "CPF *"
+      CPFTitle: <>CPF <ast>*</ast></>
     },
     "casdinho": {
-      CPFTitle: "CPF"
+      CPFTitle: <>CPF</>
     }
   }
 ]
@@ -131,14 +131,14 @@ function InitialDataInputs({ idCourse }) {
     <Container>
       <h3>Dados iniciais</h3>
       
-      <label htmlFor="name">Nome completo *</label>
+      <label htmlFor="name">Nome completo <ast>*</ast></label>
       <p>Conforme consta no documento de identidade.</p>
       <input 
           type="text" id="name" required
           onChange={handleName}
       />
 
-      <label htmlFor="rg">RG *</label>
+      <label htmlFor="rg">RG <ast>*</ast></label>
       <p>Escreva apenas os números.</p>
       <input 
           type="text" id="rg" required
@@ -153,13 +153,13 @@ function InitialDataInputs({ idCourse }) {
           onChange={handleCPF}
       />
 
-      <label htmlFor="email">E-mail *</label>
+      <label htmlFor="email">E-mail <ast>*</ast></label>
       <input 
           type="email" id="email" required
           onChange={handleEmail}
       />
 
-      <label htmlFor="confirmEmail">Confirmar e-mail *</label>
+      <label htmlFor="confirmEmail">Confirmar e-mail <ast>*</ast></label>
       <input 
           type="email" id="confirmEmail" required
           onChange={handleConfirmEmail}

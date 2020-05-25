@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import FormRegistrationContext from './context';
-import { Container } from './styles';
+import { Container, Button } from '../../pages/FormRegistration/styles';
 import InfoForm from '../../sections/InfoForm';
 import InitialDataInputs from '../../sections/InitialDataInputs';
 import PersonalDataInputs from '../../sections/PersonalDataInputs';
@@ -8,6 +8,17 @@ import PrivateSpacesInputs from '../../sections/PrivateSpacesInputs';
 import RegistrationFeeInputs from '../../sections/RegistrationFeeInputs';
 
 import api from '../../services/api';
+
+const infosCourse = [
+  {
+    "casdvest": {
+      infoTitle: "Inscrições Vestibulinho CASDvest 2021"
+    },
+    "casdinho": {
+      infoTitle: "Inscrições Vestibulinho CASDinho 2021"
+    }
+  }
+];
 
 function FormRegistration({ idCourse }) {
   const [actualSection, setActualSection] = useState(0);
@@ -158,10 +169,11 @@ function FormRegistration({ idCourse }) {
   return (
     <FormRegistrationContext.Provider value={{ formData, setFormData }}>
       <Container>
+        <h1>{infosCourse[0][idCourse].infoTitle}</h1>
         <form onSubmit={handleSubmit}>
           {sections[actualSection]}
-          {actualSection !== 0 && <button className="btn" onClick={handlePreviousButton}>Anterior</button>}
-          <button disabled={formData.disabledButton} className="btn" onClick={handleNextButton}>Próximo</button>
+          {actualSection !== 0 && <Button className="btn" onClick={handlePreviousButton}>Anterior</Button>}
+          <Button disabled={formData.disabledButton} className="btn" onClick={handleNextButton}>Próximo</Button>
         </form>
         {hasRGCandidate === true ? <p>Esse RG já foi cadastrado!</p> : null}
       </Container>

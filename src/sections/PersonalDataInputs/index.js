@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Container } from './styles';
+import { Container } from '../../pages/FormRegistration/styles';
 import FormRegistrationContext from '../../pages/FormRegistration/context';
 
 // Diferenças entre CASDvest e CASDinho
@@ -108,7 +108,7 @@ const difCourse = [
                 <option value="Outra">Outra</option>
             </>,
             // Pergunta de forma de conhecimento sobre o PS (legenda)
-            wayLabel: "Como você tomou conhecimento do Processo Seletivo do CASDvest? *"
+            wayLabel: <>Como você tomou conhecimento do Processo Seletivo do CASDvest? <ast>*</ast></>
         },
         "casdinho": {
             schoolingText:
@@ -256,7 +256,7 @@ const difCourse = [
                 <option value="YOSHIYA TAKAOKA">YOSHIYA TAKAOKA</option>
                 <option value="ZILAH FERREIRA VIAGI PASSARELLI DE CAMPOS PROFESSORA">ZILAH FERREIRA VIAGI PASSARELLI DE CAMPOS PROFESSORA</option>
             </>,
-            wayLabel: "Como você tomou conhecimento do Processo Seletivo do CASDinho? *"
+            wayLabel: <>Como você tomou conhecimento do Processo Seletivo do CASDinho? <ast>*</ast></>
         }
     }
 ]
@@ -456,7 +456,7 @@ function PersonalDataInputs({ idCourse }) {
         <Container>
             <h3>Dados pessoais</h3>
 
-            <label htmlFor="gender">Gênero *</label>
+            <label htmlFor="gender">Gênero <ast>*</ast></label>
             <select id="gender" required
             onChange={e => {const newData = {...personalData, gender: e.target.value}; setPersonalData(newData);}}>
                 <option value=""></option>
@@ -464,21 +464,21 @@ function PersonalDataInputs({ idCourse }) {
                 <option value="Masculino">Masculino</option>
             </select>
 
-            <label htmlFor="birthDate">Data de nascimento *</label>
+            <label htmlFor="birthDate">Data de nascimento <ast>*</ast></label>
             <p>Escreva no formato DD/MM/AAAA.</p>
             <input 
                 type="text" id="birthDate" required placeholder="DD/MM/AAAA"
                 onChange={handleDate}
             />
 
-            <label htmlFor="relativeName">Nome de um responsável *</label>
+            <label htmlFor="relativeName">Nome de um responsável <ast>*</ast></label>
             <p>Conforme consta no documento de identidade.</p>
             <input 
                 type="text" id="relativeName" required
                 onChange={handleRelativeName}
             />
 
-            <label htmlFor="kinship">Parentesco do responsável *</label>
+            <label htmlFor="kinship">Parentesco do responsável <ast>*</ast></label>
             <select id="kinship" required
             onChange={handleKinship}>
                 <option value=""></option>
@@ -493,14 +493,14 @@ function PersonalDataInputs({ idCourse }) {
                 <option value="Outro">Outro</option>
             </select>
 
-            <label hidden htmlFor="otherKinship" id="labelKinship">Outro parentesco: *</label>
+            <label hidden htmlFor="otherKinship" id="labelKinship">Outro parentesco: <ast>*</ast></label>
             <input
                 type="hidden" id="otherKinship"
                 onChange={e => {var handledKinship = handleStrings(e.target.value);
                                 const newData = {...personalData, otherKinship: handledKinship}; setPersonalData(newData);}}
             />
 
-            <label htmlFor="phone1">Telefone 1 *</label>
+            <label htmlFor="phone1">Telefone 1 <ast>*</ast></label>
             <p>Insira apenas os números, incluindo DDD.</p>
             <input 
                 type="text" id="phone1" required
@@ -514,7 +514,7 @@ function PersonalDataInputs({ idCourse }) {
                 onChange={handlePhone2}
             />
 
-            <label htmlFor="street">Endereço *</label>
+            <label htmlFor="street">Endereço <ast>*</ast></label>
             <p>Nome da rua, avenida ou correspondente (sem número ou complemento).</p> 
             <input 
                 type="name" id="street" required
@@ -522,7 +522,7 @@ function PersonalDataInputs({ idCourse }) {
                                 const newData = {...address, street: handledStreet}; setAddress(newData);}}
             />
             
-            <label htmlFor="numberStreet">Número *</label>
+            <label htmlFor="numberStreet">Número <ast>*</ast></label>
             <p>Número da residência.</p>
             <input 
                 type="number" id="numberStreet" required
@@ -537,28 +537,28 @@ function PersonalDataInputs({ idCourse }) {
                                 const newData = {...address, additionalAddress: handledAdditional}; setAddress(newData);}}
             />
 
-            <label htmlFor="neighborhood">Bairro *</label>    
+            <label htmlFor="neighborhood">Bairro <ast>*</ast></label>    
             <input
                 type="name" id="neighborhood" required
                 onChange={e => {var handledNeighborhood = handleStrings(e.target.value);
                                 const newData = {...address, neighborhood: handledNeighborhood}; setAddress(newData);}}
             />
 
-            <label htmlFor="cep">CEP *</label>
+            <label htmlFor="cep">CEP <ast>*</ast></label>
             <p>Insira apenas os números.</p>
             <input
                 type="number" id="cep" required
                 onChange={handleCEP}
             />
 
-            <label htmlFor="city">Cidade *</label>
+            <label htmlFor="city">Cidade <ast>*</ast></label>
             <input
                 type="name" id="city" required
                 onChange={e => {var handledCity = handleStrings(e.target.value);
                                 const newData = {...address, city: handledCity}; setAddress(newData);}}
             />
 
-            <label htmlFor="state">Estado *</label>
+            <label htmlFor="state">Estado <ast>*</ast></label>
             <select id="state" required
             onChange={e => {const newData = {...address, state: e.target.value}; setAddress(newData);}}>
                 <option value=""></option>
@@ -591,7 +591,7 @@ function PersonalDataInputs({ idCourse }) {
                 <option value="TO">TO</option>
             </select>
 
-            <label htmlFor="specialNecessity">Você possui alguma necessidade especial? *</label>
+            <label htmlFor="specialNecessity">Você possui alguma necessidade especial? <ast>*</ast></label>
             <select id="specialNecessity" required
             onChange={handleSpecialNecessity}>
                 <option value=""></option>
@@ -599,14 +599,14 @@ function PersonalDataInputs({ idCourse }) {
                 <option value="Sim">Sim</option>
             </select>
 
-            <label hidden htmlFor="whichNecessity" id="labelSpecialNecessity">Qual sua necessidade especial? *</label>
+            <label hidden htmlFor="whichNecessity" id="labelSpecialNecessity">Qual sua necessidade especial? <ast>*</ast></label>
             <input
                 type="hidden" id="whichNecessity"
                 onChange={e => {var handledNecessity = handleStrings(e.target.value);
                                 const newData = {...personalData, whichNecessity: handledNecessity}; setPersonalData(newData);}}
             />
 
-            <label htmlFor="schooling">Escolaridade *</label>
+            <label htmlFor="schooling">Escolaridade <ast>*</ast></label>
             {infos.schoolingText}
             <select id="schooling" required
             onChange={e => {const newData = {...personalData, schooling: e.target.value}; setPersonalData(newData);}}>
@@ -614,7 +614,7 @@ function PersonalDataInputs({ idCourse }) {
                 {infos.schoolingOptions}
             </select>
 
-            <label htmlFor="kindSchool">Tipo de escola *</label>
+            <label htmlFor="kindSchool">Tipo de escola <ast>*</ast></label>
             {infos.kindSchoolText}
             <select id="kindSchool" required
             onChange={e => {const newData = {...personalData, kindSchool: e.target.value}; setPersonalData(newData);}}>
@@ -625,7 +625,7 @@ function PersonalDataInputs({ idCourse }) {
                 <option value="PV">Privada</option>
             </select>
 
-            <label htmlFor="school">Nome da escola *</label>
+            <label htmlFor="school">Nome da escola <ast>*</ast></label>
             {infos.schoolText}
             <select id="school" required
             onChange={handleSchool}>
@@ -634,7 +634,7 @@ function PersonalDataInputs({ idCourse }) {
                 {infos.schoolOptions}
             </select>
 
-            <label hidden htmlFor="otherSchool" id="labelSchool">Outra escola: *</label>
+            <label hidden htmlFor="otherSchool" id="labelSchool">Outra escola: <ast>*</ast></label>
             <input
                 type="hidden" id="otherSchool"
                 onChange={e => {var handledSchool = handleStrings(e.target.value);
@@ -656,7 +656,7 @@ function PersonalDataInputs({ idCourse }) {
                 <option value="outro">Outro</option>
             </select>
 
-            <label hidden htmlFor="otherWay" id="labelWay">Outra forma: *</label>
+            <label hidden htmlFor="otherWay" id="labelWay">Outra forma: <ast>*</ast></label>
             <input
                 type="hidden" id="otherWay"
                 onChange={e => {var handledWay = handleStrings(e.target.value);
