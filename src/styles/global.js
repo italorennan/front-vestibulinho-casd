@@ -2,6 +2,8 @@ import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 
   * {
     margin: 0;
@@ -15,12 +17,12 @@ export default createGlobalStyle`
   }
 
   body {
-    background: #f5f5f5;
+    background: #3192b3;
     -webkit-font-smoothing: antialiased !important;
   }
 
   body, input, button {
-    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-family: 'Montserrat', 'Lobster', 'Roboto', Arial, Helvetica, sans-serif;
     font-size: 16px;
     color: #333;
   }
