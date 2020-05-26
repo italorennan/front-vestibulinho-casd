@@ -1,5 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
+<<<<<<< Updated upstream
 import { Container, ErrorMessage } from './styles';
+=======
+import { Container } from './styles';
+>>>>>>> Stashed changes
 import FormRegistrationContext from '../../pages/FormRegistration/context';
 
 function PersonalDataInputs() {
@@ -241,7 +245,10 @@ function PersonalDataInputs() {
                 type="text" id="nome" required
                 onChange={handleNome}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.nome}</ErrorMessage>
+=======
+>>>>>>> Stashed changes
 
             <label htmlFor="rg">RG *</label>
             <p>Escreva apenas os números.</p>
@@ -249,7 +256,11 @@ function PersonalDataInputs() {
                 type="text" id="rg" required
                 onChange={handleRG}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.rg}</ErrorMessage>
+=======
+            <p id="errorRG" className="errorMsg">{errors.rg}</p>
+>>>>>>> Stashed changes
             
             <label htmlFor="cpf">CPF *</label>
             <p>Escreva apenas os números.</p>
@@ -257,7 +268,11 @@ function PersonalDataInputs() {
                 type="number" id="cpf" required
                 onChange={handleCPF}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.cpf}</ErrorMessage>
+=======
+            <p id="errorCPF" className="errorMsg">{errors.cpf}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="sexo">Sexo *</label>
             <select id="sexo" required
@@ -266,7 +281,11 @@ function PersonalDataInputs() {
                 <option value="Feminino">Feminino</option>
                 <option value="Masculino">Masculino</option>
             </select>
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.sexo}</ErrorMessage>
+=======
+            <p id="errorSexo" className="errorMsg">{errors.sexo}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="dataNascimento">Data de nascimento *</label>
             <p>Escreva no formato DD/MM/AAAA.</p>
@@ -274,7 +293,11 @@ function PersonalDataInputs() {
                 type="text" id="dataNascimento" required placeholder="DD/MM/AAAA"
                 onChange={handleData}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.nascimento}</ErrorMessage>
+=======
+            <p id="errorNascimento" className="errorMsg">{errors.nascimento}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="nomeResponsavel">Nome de um responsável *</label>
             <p>Conforme consta no documento de identidade. Escreva cada nome com a primeira letra maiúscula e as outras minúsculas, sem acentos. Use um espaço entre cada nome.</p>
@@ -282,7 +305,11 @@ function PersonalDataInputs() {
                 type="text" id="nomeResponsavel" required
                 onChange={handleNomeResponsavel}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.responsavel}</ErrorMessage>
+=======
+            <p id="errorResponsavel" className="errorMsg">{errors.responsavel}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="parentesco">Parentesco do responsável *</label>
             <select id="parentesco" required
@@ -298,14 +325,22 @@ function PersonalDataInputs() {
                 <option value="Irmão">Irmão</option>
                 <option value="Outro">Outro</option>
             </select>
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.parentesco}</ErrorMessage>
+=======
+            <p id="errorParentesco" className="errorMsg">{errors.parentesco}</p>
+>>>>>>> Stashed changes
 
             <label hidden htmlFor="outroParentesco" id="labelParentesco">Outro parentesco: *</label>
             <input
                 type="hidden" id="outroParentesco"
                 onChange={e => {const newData = {...personalData, outroParentesco: e.target.value}; setPersonalData(newData);}}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.outroparentesco}</ErrorMessage>
+=======
+            <p id="errorOutroParentesco" className="errorMsg">{errors.outroparentesco}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="telefone1">Telefone 1 *</label>
             <p>Insira apenas os números, incluindo DDD.</p>
@@ -313,7 +348,11 @@ function PersonalDataInputs() {
                 type="text" id="telefone1" required
                 onChange={handleTelefone1}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.telefone1}</ErrorMessage>
+=======
+            <p id="errorTelefone1" className="errorMsg">{errors.telefone1}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="telefone2">Telefone 2</label>
             <p>Insira apenas os números, incluindo DDD.</p>
@@ -321,21 +360,33 @@ function PersonalDataInputs() {
                 type="text" id="telefone2"
                 onChange={handleTelefone2}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.telefone2}</ErrorMessage>
+=======
+            <p id="errorTelefone2" className="errorMsg">{errors.telefone2}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="email">E-mail *</label>
             <input 
                 type="email" id="email" required
                 onChange={handleEmail}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.email}</ErrorMessage>
+=======
+            <p id="errorEmail" className="errorMsg">{errors.email}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="confirmarEmail">Confirmar e-mail *</label>
             <input 
                 type="email" id="confirmarEmail" required
                 onChange={handleConfirmarEmail}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.confirmaremail}</ErrorMessage>
+=======
+            <p id="errorConfirmarEmail" className="errorMsg">{errors.confirmaremail}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="endereco">Endereço *</label>
             <p>Rua, número e eventuais complementos (apartamento, bloco, ...).</p>
@@ -343,14 +394,22 @@ function PersonalDataInputs() {
                 type="name" id="endereco" required
                 onChange={e => {const newData = {...personalData, endereco: e.target.value}; setPersonalData(newData);}}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.endereco}</ErrorMessage>
+=======
+            <p id="errorEndereco" className="errorMsg">{errors.endereco}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="bairro">Bairro *</label>    
             <input
                 type="name" id="bairro" required
                 onChange={e => {const newData = {...personalData, bairro: e.target.value}; setPersonalData(newData);}}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.bairro}</ErrorMessage>
+=======
+            <p id="errorBairro" className="errorMsg">{errors.bairro}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="cep">CEP *</label>
             <p>Insira apenas os números.</p>
@@ -358,14 +417,22 @@ function PersonalDataInputs() {
                 type="number" id="cep" required
                 onChange={handleCEP}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.cep}</ErrorMessage>
+=======
+            <p id="errorCep" className="errorMsg">{errors.cep}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="cidade">Cidade *</label>
             <input
                 type="name" id="cidade" required
                 onChange={e => {const newData = {...personalData, cidade: e.target.value}; setPersonalData(newData);}}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.cidade}</ErrorMessage>
+=======
+            <p id="errorCidade" className="errorMsg">{errors.cidade}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="estado">Estado *</label>
             <select id="estado" required
@@ -399,7 +466,11 @@ function PersonalDataInputs() {
                 <option value="SP">SP</option>
                 <option value="TO">TO</option>
             </select>
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.estado}</ErrorMessage>
+=======
+            <p id="errorEstado" className="errorMsg">{errors.estado}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="necessidadeEspecial">Você possui alguma necessidade especial? *</label>
             <select id="necessidadeEspecial" required
@@ -408,14 +479,22 @@ function PersonalDataInputs() {
                 <option value="Não">Não</option>
                 <option value="Sim">Sim</option>
             </select>
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.necessidadeespecial}</ErrorMessage>
+=======
+            <p id="errorNecessidadeEspecial" className="errorMsg">{errors.necessidadeespecial}</p>
+>>>>>>> Stashed changes
 
             <label hidden htmlFor="qualNecessidade" id="labelNecessidade">Qual sua necessidade especial? *</label>
             <input
                 type="hidden" id="qualNecessidade"
                 onChange={e => {const newData = {...personalData, qualNecessidade: e.target.value}; setPersonalData(newData);}}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.qualnecessidade}</ErrorMessage>
+=======
+            <p id="errorQualNecessidade" className="errorMsg">{errors.qualnecessidade}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="escolaridade">Escolaridade *</label>
             <p>O Processo Seletivo do CASDvest destina-se a alunos que já tenham concluído ou que concluirão o Ensino Médio em 2020.</p>
@@ -426,7 +505,11 @@ function PersonalDataInputs() {
                 <option value="3">Cursando o 3º ano do Ensino Médio em 2020</option>
                 <option value="2">Cursando o 2º ano do Ensino Médio em 2020</option>
             </select>
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.escolaridade}</ErrorMessage>
+=======
+            <p id="errorEscolaridade" className="errorMsg">{errors.escolaridade}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="tipoEscola">Tipo de escola *</label>
             <p>Considere a escola em que você concluiu ou concluirá o Ensino Médio.</p>
@@ -438,7 +521,11 @@ function PersonalDataInputs() {
                 <option value="PM">Pública Municipal</option>
                 <option value="PV">Privada</option>
             </select>
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.tipoescola}</ErrorMessage>
+=======
+            <p id="errorTipoEscola" className="errorMsg">{errors.tipoescola}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="escola">Nome da escola *</label>
             <p>Escolha a escola em que você concluiu ou concluirá o Ensino Médio.</p>
@@ -530,14 +617,22 @@ function PersonalDataInputs() {
                 <option value="ZILAH FERREIRA VIAGI PASSARELLI DE CAMPOS PROFESSORA">ZILAH FERREIRA VIAGI PASSARELLI DE CAMPOS PROFESSORA</option>
                 <option value="Outra">Outra</option>
             </select>
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.escola}</ErrorMessage>
+=======
+            <p id="errorEscola" className="errorMsg">{errors.escola}</p>
+>>>>>>> Stashed changes
 
             <label hidden htmlFor="outraEscola" id="labelEscola">Outra escola: *</label>
             <input
                 type="hidden" id="outraEscola"
                 onChange={e => {const newData = {...personalData, outraEscola: e.target.value}; setPersonalData(newData);}}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.outraescola}</ErrorMessage>
+=======
+            <p id="errorOutraEscola" className="errorMsg">{errors.outraescola}</p>
+>>>>>>> Stashed changes
 
             <label htmlFor="conhecimentoPS">Como você tomou conhecimento do Processo Seletivo do CASDvest? *</label>
             <select id="conhecimentoPS" required
@@ -553,14 +648,22 @@ function PersonalDataInputs() {
                 <option value="visita">Visita à escola</option>
                 <option value="outro">Outro</option>
             </select>
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.conhecimentopS}</ErrorMessage>
+=======
+            <p id="errorConhecimentoPS" className="errorMsg">{errors.conhecimentopS}</p>
+>>>>>>> Stashed changes
 
             <label hidden htmlFor="outraForma" id="labelForma">Outra forma: *</label>
             <input
                 type="hidden" id="outraForma"
                 onChange={e => {const newData = {...personalData, outraForma: e.target.value}; setPersonalData(newData);}}
             />
+<<<<<<< Updated upstream
             <ErrorMessage>{errors.outraforma}</ErrorMessage>
+=======
+            <p id="errorOutraForma" className="errorMsg">{errors.outraforma}</p>
+>>>>>>> Stashed changes
 
             { console.log(formData) }
         </Container>

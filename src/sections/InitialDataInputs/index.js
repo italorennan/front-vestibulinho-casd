@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Container } from '../../pages/FormRegistration/styles';
+import { Container, ErrorMessage } from '../../pages/FormRegistration/styles';
 import FormRegistrationContext from '../../pages/FormRegistration/context';
 
 // Adaptar diferenças entre CASDvest e CASDinho
@@ -17,6 +17,7 @@ const difCourse = [
 
 function InitialDataInputs({ idCourse }) {
   const [initialData, setInitialData] = useState({});
+  const [errors, setErrors] = useState({});
   const { formData, setFormData } = useContext(FormRegistrationContext);
   const [verEmail, setVerEmail] = useState({email1: "erro", email2:"erro"});
 
@@ -50,18 +51,25 @@ function InitialDataInputs({ idCourse }) {
       if(NomeRegEx.test(e.target.value)) {
           var handledName = handleStrings(e.target.value);
           setInitialData({...initialData, name: handledName});
+            errors.nome = "";
       }
-      else
+      else {
           setInitialData({...initialData, name: ""});
+          setErrors({...errors, nome: "Escreva seu nome completo"});
+      }
   }
 
   // Validação do RG
   const RGRegEx = RegExp(/^[0-9]*([0-9Xx]){1}$/);
   function handleRG(e) {
-      if(RGRegEx.test(e.target.value))
+      if(RGRegEx.test(e.target.value)) {
           setInitialData({...initialData, rg: e.target.value});
-      else
+          errors.rg = "";
+      }
+      else {
           setInitialData({...initialData, rg: ""});
+          setErrors({...errors, rg: "Número de RG inválido"});
+      }
   }
 
   // Validação do CPF
@@ -94,24 +102,34 @@ function InitialDataInputs({ idCourse }) {
         
         if (validity) setInitialData({...initialData, cpf: n});
         else setInitialData({...initialData, cpf: "inval"});
+        errors.cpf = "";
       }
       else {
         if (e.target.value == "") setInitialData({...initialData, cpf: ""});
         else setInitialData({...initialData, cpf: "inval"});
+        setErrors({...errors, cpf: "Número de CPF inválido"});
       }
   }
 
   // Salvar e-mail apenas se os dois digitados forem iguais
+  var emailRegExp = /[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm;
   function handleEmail(e) {
       var aux = e.target.value;
 
+      if (!emailRegExp.test(aux)) {
+          setErrors({...errors, email: "Email inválido"});
+      } else {
+          errors.email = "";
+      }
       if (aux === verEmail.email2) {
           setInitialData({...initialData, email: aux});
           setVerEmail({...verEmail, email1: aux});
+          //errors.email = "";
       }
       else {
           setInitialData({...initialData, email: "error"});
           setVerEmail({...verEmail, email1: aux});
+          //setErrors({...errors, email: "Email inválido"});
       }
   }
   function handleConfirmEmail(e) {
@@ -120,10 +138,12 @@ function InitialDataInputs({ idCourse }) {
       if (aux === verEmail.email1) {
           setInitialData({...initialData, email: aux});
           setVerEmail({...verEmail, email2: aux});
+          errors.confirmaremail = "";
       }
       else {
           setInitialData({...initialData, email: "error"});
           setVerEmail({...verEmail, email2:aux});
+          setErrors({...errors, confirmaremail: "Emails não conferem"});
       }
   }
   
@@ -137,6 +157,7 @@ function InitialDataInputs({ idCourse }) {
           type="text" id="name" required
           onChange={handleName}
       />
+      <ErrorMessage>{errors.nome}</ErrorMessage>
 
       <label htmlFor="rg">RG <ast>*</ast></label>
       <p>Escreva apenas os números.</p>
@@ -144,6 +165,7 @@ function InitialDataInputs({ idCourse }) {
           type="text" id="rg" required
           onChange={handleRG}
       />
+      <ErrorMessage>{errors.rg}</ErrorMessage>
       
       { /* CPF obrigatório apenas para o CASDvest */ }
       <label htmlFor="cpf" id="labelCpf">{difCourse[0][idCourse].CPFTitle}</label>
@@ -152,18 +174,21 @@ function InitialDataInputs({ idCourse }) {
           type="number" id="cpf"
           onChange={handleCPF}
       />
+      <ErrorMessage>{errors.cpf}</ErrorMessage>
 
       <label htmlFor="email">E-mail <ast>*</ast></label>
       <input 
           type="email" id="email" required
           onChange={handleEmail}
       />
+      <ErrorMessage>{errors.email}</ErrorMessage>
 
       <label htmlFor="confirmEmail">Confirmar e-mail <ast>*</ast></label>
       <input 
           type="email" id="confirmEmail" required
           onChange={handleConfirmEmail}
       />
+      <ErrorMessage>{errors.confirmaremail}</ErrorMessage>
 
       { console.log(formData) }
     </Container>
