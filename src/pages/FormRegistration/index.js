@@ -136,41 +136,44 @@ function FormRegistration({ idCourse }) {
     setActualSection(actualSection-1);
   }
 
-  function handleNextButton() {
-    if (actualSection < sections.length-1) {
-      setActualSection(actualSection+1);
-    }
+  async function handleNextButton() {
+      if(actualSection === 1 ){
+         const respGET = await api.get(`/candidate/checkCandidate?rg=${formData.rg}`);
+         if(!respGET.data){
+            setActualSection(actualSection+1);
+            console.log("Candidato não encontrado")
+         }
+         else
+            alert("Este RG já está registrado!");
+      }
+      else if (actualSection < sections.length-1) {
+         setActualSection(actualSection+1);
+      }
   }
 
   async function handleSubmit(e) {
     e.preventDefault(); 
+    console.log(actualSection);
     setFormData({...formData, disabledButton: true });
     console.log('formData', formData);
     
-    if (actualSection === 0) {
+    if (actualSection === 1) {
       console.log(`VERIFICAR NO BANCO SE JÁ EXISTE O RG ${formData.rg} CADASTRADO`);
     }
     
 
     if (actualSection === sections.length-1) {
+      console.log("oi");
       const { name, rg, cpf, email, privateSpace, registrationFee } = formData; // ------- [TODO] IR ADICIONANDO CAMPOS QDE CADA SECTION QUE SERÃO SALVOS
       const dataToSave = { name, rg, cpf, email, privateSpace, registrationFee };
-      console.log('DADOS A SEREM SALVOS NO BANCO', dataToSave);
+      console.log('DADOS A SEREM SALVOS NO BANCO', formData);
+      
+      const newCandidate = await api.post('/candidate/createCandidate',
+         JSON.stringify(formData), { headers: { 'Content-Type': 'application/json'}}  
+      );
+      console.log("Novo candidato Criado", newCandidate);
+
     }
-
-    // const respGET = await api.get(`/candidate/checkCandidate?rg=${dataToSave.rg}`);
-    // if (respGET.data.candidateBool) { //existe cadastro com esse rg
-    //   setHasRGCandidate(true);
-    // } else { //não existe cadastro com esse rg
-    //   setHasRGCandidate(false);
-    //   //POST temporário
-    //   await api.post('/candidate/createCandidate', 
-    //     JSON.stringify(dataToSave), { headers: { 'Content-Type': 'application/json' }}
-    //   );
-
-    //   console.log('Prosseguir com o preenchimento do formulário');
-    //   console.log('Button libera a próxima section --> PersonalDataForm');
-    // }
   }
 
   return (
