@@ -2,29 +2,73 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Container } from '../../pages/FormRegistration/styles';
 import FormRegistrationContext from '../../pages/FormRegistration/context';
 
-function RegistrationFeeInputs() {
-  const [registrationFee, setRegistrationFee] = useState('');
+// Diferenças entre CASDvest e CASDinho
+const difCourses = [
+  {
+    "casdvest": {
+      text:
+      <>
+        <text>Conforme previsto no <span>Item II, "Da Taxa de Inscrição"</span> do <span>Edital do Processo Seletivo de Alunos do CASDvest 2021</span>, será cobrada uma taxa de <span>R$ 10,00 (dez reais)</span> para participar do Processo Seletivo, sendo que tal valor deve ser levado, <span>em espécie</span>, pelo candidato no dia <span>no Exame Teórico</span>.</text>
+        <text>Todavia, você pode solicitar <span>isenção do pagamento</span> da taxa de inscrição (ou seja, não ter que pagar a taxa de inscrição), sendo <span>obrigatória</span> a apresentação de uma <span>justificativa</span> no campo correspondente abaixo. As justificativas serão analisadas pela Diretoria do CASDvest e o <span>resultado dessa solicitação</span> será enviado <span>dia 1 de outubro</span> ao e-mail fornecido neste formulário e disponibilizado na central do candidato no site. Os candidatos que <span>tiverem a solicitação de isenção negada</span> devem fazer o pagamento da taxa no dia do Exame Teórico.</text>
+        <text>Caso o <span>candidato em situação de não-isenção</span> (não participou do processo de isenção ou teve a sua isenção indeferida pela administração do curso) <span>não levar os R$10,00</span> no dia da prova, <span>a sua permanência no processo seletivo ficará pendente</span> até que o candidato pague a taxa de inscrição, em dinheiro, diretamente na <span>secretaria da sede educacional da ONG</span>, Rua Tsunessaburo Makiguti, nº 139, Floradas de São José, São José dos Campos – SP, no <span>período das 19h às 21h entre os dias 07/10/2019 e 18/10/2019. O atendimento será efetuado apenas em dias úteis.</span></text>
+      </>
+    },
+    "casdinho": {
+      text:
+      <>
+        <text>Conforme previsto no <span>Item II, "Da Taxa de Inscrição"</span> do <span>Edital do Processo Seletivo de Alunos do CASDinho 2021</span>, será cobrada uma taxa de <span>R$ 10,00 (dez reais)</span> para participar do Processo Seletivo, sendo que tal valor deve ser levado, <span>em espécie</span>, pelo candidato no dia <span>no Exame Teórico</span>.</text>
+        <text>Todavia, você pode solicitar <span>isenção do pagamento</span> da taxa de inscrição (ou seja, não ter que pagar a taxa de inscrição), sendo <span>obrigatória</span> a apresentação de uma <span>justificativa</span> no campo correspondente abaixo. As justificativas serão analisadas pela Diretoria do CASDinho e o <span>resultado dessa solicitação</span> será enviado <span>dia 1 de outubro</span> ao e-mail fornecido neste formulário e disponibilizado na central do candidato no site. Os candidatos que <span>tiverem a solicitação de isenção negada</span> devem fazer o pagamento da taxa no dia do Exame Teórico.</text>
+        <text>Caso o <span>candidato em situação de não-isenção</span> (não participou do processo de isenção ou teve a sua isenção indeferida pela administração do curso) <span>não levar os R$10,00</span> no dia da prova, <span>a sua permanência no processo seletivo ficará pendente</span> até que o candidato pague a taxa de inscrição, em dinheiro, diretamente na <span>secretaria da sede educacional da ONG</span>, Rua Tsunessaburo Makiguti, nº 139, Floradas de São José, São José dos Campos – SP, no <span>período das 19h às 21h entre os dias 07/10/2019 e 18/10/2019. O atendimento será efetuado apenas em dias úteis.</span></text>
+      </>
+    }
+  }
+]
+
+function RegistrationFeeInputs({ idCourse }) {
+  const [registrationFee, setRegistrationFee] = useState({});
   const { formData, setFormData } = useContext(FormRegistrationContext);
 
-  useEffect(() => setFormData({...formData, registrationFee}), [registrationFee, setFormData, setRegistrationFee]);
+  useEffect(() => setFormData({...formData, ...registrationFee}), [registrationFee, setFormData, setRegistrationFee]);
 
   function handleSelect(e) {
-    setRegistrationFee(e.target.value);
+    var fee = e.target.value;
+
+    if (fee == "sim") {
+      document.getElementById("labelJustification").removeAttribute("hidden");
+      document.getElementById("textJustification").removeAttribute("hidden");
+      document.getElementById("justification").setAttribute("type","text");
+      document.getElementById("justification").setAttribute("required","");
+
+      setRegistrationFee({...registrationFee, exemptionRequest: fee});
+    }
+    else {
+      document.getElementById("labelJustification").setAttribute("hidden","");
+      document.getElementById("textJustification").setAttribute("hidden","");
+      document.getElementById("justification").setAttribute("type","hidden");
+      document.getElementById("justification").removeAttribute("required");
+
+      setRegistrationFee({...registrationFee, exemptionRequest: fee, justification: ""});
+    }
   }
 
   return (
     <Container>
       <h3>Taxa de Inscrição</h3>
-      <text>Conforme previsto no Item II, "Da Taxa de Inscrição" do Edital do Processo Seletivo de Alunos do CASDinho 2020, será cobrada uma taxa de R$ 10,00 (dez reais) para participar do Processo Seletivo, sendo que tal valor deve ser levado, em espécie, pelo candidato no dia no Exame Teórico.</text>
-      <text>Todavia, você pode solicitar isenção do pagamento da taxa de inscrição (ou seja, não ter que pagar a taxa de inscrição), sendo obrigatória a apresentação de uma justificativa no campo correspondente abaixo. As justificativas serão analisadas pela Diretoria do CASDinho e o resultado dessa solicitação será enviado dia 1 de outubro ao e-mail fornecido neste formulário. Os candidatos que tiverem a solicitação de isenção negada devem fazer o pagamento da taxa no dia do Exame Teórico.</text>
-      <text>Caso o candidato em situação de não-isenção (não participou do processo de isenção ou teve a sua isenção indeferida pela administração do curso) não levar R$10,00 nessa ocasião, a sua permanência no processo seletivo ficará pendente até que o candidato pague a taxa de inscrição, em dinheiro, diretamente na secretaria da sede educacional da ONG, Rua Tsunessaburo Makiguti, nº 139, Floradas de São José, São José dos Campos – SP, no período das 19h às 21h entre os dias 07/10/2019 e 18/10/2019. O atendimento será efetuado apenas em dias úteis.</text>
+      { difCourses[0][idCourse].text }
    
       <label htmlFor="registrationFee">Solicitação de isenção <ast>*</ast></label>
-      <select id="registrationFee" value={registrationFee} onChange={handleSelect}>
+      <select id="registrationFee" onChange={handleSelect}>
         <option value=""></option>
-        <option value="1">QUERO receber isenção da taxa de inscrição, ou seja, NÃO QUERO fazer o pagamento da taxa</option>
-        <option value="0">NÃO QUERO receber isenção da taxa de inscrição, ou seja, QUERO fazer o pagamento da taxa</option>
+        <option value="sim">QUERO receber isenção da taxa de inscrição, ou seja, NÃO QUERO fazer o pagamento da taxa</option>
+        <option value="nao">NÃO QUERO receber isenção da taxa de inscrição, ou seja, QUERO fazer o pagamento da taxa</option>
       </select>
+      
+      <label hidden htmlFor="justification" id="labelJustification">Justificativa da solicitação de isenção <ast>*</ast></label>
+      <p hidden id="textJustification">Descreva brevemente o motivo da sua necessidade de isenção, ou seja, de não pagar a taxa de inscrição. (máximo 300 caracteres)</p>
+      <input
+          type="hidden" id="justification" maxLength="300"
+          onChange={e => {const newData = {...registrationFee, justification: e.target.value}; setRegistrationFee(newData);}}
+      />
 
       { console.log(formData) }
     </Container>

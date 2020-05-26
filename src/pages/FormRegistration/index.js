@@ -30,7 +30,7 @@ function FormRegistration({ idCourse }) {
                     <InitialDataInputs idCourse={idCourse}/>,
                     <PersonalDataInputs idCourse={idCourse}/>, 
                     <PrivateSpacesInputs />, 
-                    <RegistrationFeeInputs />
+                    <RegistrationFeeInputs idCourse={idCourse}/>
                   ];
 
   useEffect(() => {
@@ -65,10 +65,10 @@ function FormRegistration({ idCourse }) {
               && formData.address.state
               && formData.address.street) {
                 // Validações de campos condicionais obrigatórios
-                if (!((formData.school === "Outra" && !formData.otherSchool)
-                    || (formData.wayPS === "outro" && !formData.otherWay)
-                    || (formData.kinship === "Outro" && !formData.otherKinship)
-                    || (formData.ifSpecialNecessity === "Sim" && !formData.whichNecessity))) {
+                if (!((formData.school === "Outra" && !formData.otherSchool && formData.otherSchool != "")
+                    || (formData.wayPS === "outro" && !formData.otherWay && formData.otherWay != "")
+                    || (formData.kinship === "Outro" && !formData.otherKinship && formData.otherKinship != "")
+                    || (formData.ifSpecialNecessity === "Sim" && !formData.whichNecessity && formData.whichNecessity != ""))) {
                       setFormData({...formData, disabledButton: false }); 
                     }
             }
@@ -77,9 +77,14 @@ function FormRegistration({ idCourse }) {
       if (actualSection === 3 && formData.privateSpace && formData.privateSpace !== "") {
         setFormData({...formData, disabledButton: false });
       }
-      if (actualSection === 4 && formData.registrationFee && formData.registrationFe !== "") {
-        setFormData({...formData, disabledButton: false });
+
+      if (actualSection === 4 && formData.exemptionRequest) {
+        if ((formData.exemptionRequest == "nao") 
+            || (formData.exemptionRequest == "sim" && formData.justification && formData.justification != "")) {
+                setFormData({...formData, disabledButton: false });
+            }
       }
+
     } else {
       if (actualSection === 1
         && ((!formData.cpf && idCourse == "casdvest") || formData.cpf === "inval"
@@ -119,8 +124,10 @@ function FormRegistration({ idCourse }) {
       if (actualSection === 3 && formData.privateSpace === "") {
         setFormData({...formData, disabledButton: true });
       }
-      if (actualSection === 4 && formData.registrationFee === "") {
-        setFormData({...formData, disabledButton: true });
+      if (actualSection === 4 && 
+        (formData.exemptionRequest == ""
+        || (formData.exemptionRequest == "sim" && !formData.justification))) {
+            setFormData({...formData, disabledButton: true });
       }
     }
   }, [formData]);
