@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Container } from '../../pages/FormRegistration/styles';
-import FormRegistrationContext from '../../pages/FormRegistration/context';
+import { Container, ErrorMessage, GeneralErrorMessage } from '../pages/FormRegistration/styles';
+import FormRegistrationContext from '../pages/FormRegistration/context';
 
 // Diferenças entre CASDvest e CASDinho
 const difCourses = [
@@ -25,7 +25,7 @@ const difCourses = [
 ]
 
 function RegistrationFeeInputs({ idCourse }) {
-  const [registrationFee, setRegistrationFee] = useState({});
+  const [registrationFee, setRegistrationFee] = useState();
   const { formData, setFormData } = useContext(FormRegistrationContext);
 
   useEffect(() => setFormData({...formData, ...registrationFee}), [registrationFee, setFormData, setRegistrationFee]);
@@ -33,22 +33,8 @@ function RegistrationFeeInputs({ idCourse }) {
   function handleSelect(e) {
     var fee = e.target.value;
 
-    if (fee == "sim") {
-      document.getElementById("labelJustification").removeAttribute("hidden");
-      document.getElementById("textJustification").removeAttribute("hidden");
-      document.getElementById("justification").setAttribute("type","text");
-      document.getElementById("justification").setAttribute("required","");
-
-      setRegistrationFee({...registrationFee, exemptionRequest: fee});
-    }
-    else {
-      document.getElementById("labelJustification").setAttribute("hidden","");
-      document.getElementById("textJustification").setAttribute("hidden","");
-      document.getElementById("justification").setAttribute("type","hidden");
-      document.getElementById("justification").removeAttribute("required");
-
-      setRegistrationFee({...registrationFee, exemptionRequest: fee, justification: ""});
-    }
+    if (fee === "sim") setRegistrationFee({...registrationFee, exemptionRequest: fee});
+    else setRegistrationFee({...registrationFee, exemptionRequest: fee, justification: ""});
   }
 
   return (
@@ -58,19 +44,29 @@ function RegistrationFeeInputs({ idCourse }) {
    
       <label htmlFor="registrationFee">Solicitação de isenção <ast>*</ast></label>
       <select id="registrationFee" onChange={handleSelect}>
+        <option value={formData.exemptionRequest} selected disabled hidden>{formData.exemptionRequest === "sim" ?
+        "QUERO receber isenção da taxa de inscrição, ou seja, NÃO QUERO fazer o pagamento da taxa"
+        : (formData.exemptionRequest === "nao" ? 
+        "NÃO QUERO receber isenção da taxa de inscrição, ou seja, QUERO fazer o pagamento da taxa" : "")}</option>
         <option value=""></option>
         <option value="sim">QUERO receber isenção da taxa de inscrição, ou seja, NÃO QUERO fazer o pagamento da taxa</option>
         <option value="nao">NÃO QUERO receber isenção da taxa de inscrição, ou seja, QUERO fazer o pagamento da taxa</option>
       </select>
+      {(formData.tryNext === true && (!formData.exemptionRequest || formData.exemptionRequest === "")) ? 
+      <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
       
-      <label hidden htmlFor="justification" id="labelJustification">Justificativa da solicitação de isenção <ast>*</ast></label>
-      <p hidden id="textJustification">Descreva brevemente o motivo da sua necessidade de isenção, ou seja, de não pagar a taxa de inscrição. (máximo 300 caracteres)</p>
+      {formData.exemptionRequest === "sim" ?
+      <><label htmlFor="justification" id="labelJustification">Justificativa da solicitação de isenção <ast>*</ast></label>
+      <p id="textJustification">Descreva brevemente o motivo da sua necessidade de isenção, ou seja, de não pagar a taxa de inscrição. (máximo 300 caracteres)</p>
       <input
-          type="hidden" id="justification" maxLength="300"
+          type="text" id="justification" maxLength="300" placeholder={formData.justification}
           onChange={e => {const newData = {...registrationFee, justification: e.target.value}; setRegistrationFee(newData);}}
-      />
+      /></> : null}
+      {(formData.tryNext === true && (formData.exemptionRequest === "sim" && (!formData.justification || formData.justification === ""))) ? 
+      <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
-      { console.log(formData) }
+      {(formData.tryNext === true && formData.disabledButton === true) ? 
+      <GeneralErrorMessage>Corrija os erros nos campos indicados acima.</GeneralErrorMessage> : null}
     </Container>
   );
 }

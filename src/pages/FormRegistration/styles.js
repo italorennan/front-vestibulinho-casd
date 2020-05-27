@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { gray } from 'color-name';
+import { gray, yellow } from 'color-name';
 
 const blueCASD = "#3192b3";
 const yellowCASD = "#f9b342";
@@ -70,7 +70,7 @@ export const Container = styled.div`
   }
 
   label > ast {
-    color: red;
+    color: #991111;
   }
 
   p {
@@ -113,12 +113,25 @@ export const Button = styled.button`
     background: white;
   }
 
-  opacity: ${props => props.disabled ? 0.6 : 1};
-  cursor: ${props => props.disabled ? "not-allowed" : "arrow"};
+  opacity: ${props => props.checkDisabled ? 0.6 : 1};
 `;
 
 export const ErrorMessage = styled.p`
 	color: #991111 !important;
-    margin-block-start: 0.1em !important;
-    margin-block-end: 0.1em !important;
+  margin-block-start: 0em !important;
+  margin-block-end: 1.5em !important;
+`;
+
+export const GeneralErrorMessage = styled(ErrorMessage)`
+  color: ${yellowCASD} !important;
+  margin-block-end: 0.5em !important;
+`;
+
+export const Box = styled.div`
+  border-style: solid;
+  border-color: ${yellowCASD};
+  background: linear-gradient(90deg, ${yellowCASD} ${props => props.size}, ${blueCASD} ${props => props.size});
+  margin-left: 5vw;
+  margin-right: 5vw;
+  height: 5vh;
 `;
