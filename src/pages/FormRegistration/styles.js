@@ -116,3 +116,9 @@ export const Button = styled.button`
   opacity: ${props => props.disabled ? 0.6 : 1};
   cursor: ${props => props.disabled ? "not-allowed" : "arrow"};
 `;
+
+export const ErrorMessage = styled.p`
+	color: #991111 !important;
+    margin-block-start: 0.1em !important;
+    margin-block-end: 0.1em !important;
+`;
