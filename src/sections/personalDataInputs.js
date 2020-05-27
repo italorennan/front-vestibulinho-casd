@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Container } from '../../pages/FormRegistration/styles';
-import FormRegistrationContext from '../../pages/FormRegistration/context';
+import { Container, ErrorMessage, GeneralErrorMessage } from '../pages/FormRegistration/styles';
+import FormRegistrationContext from '../pages/FormRegistration/context';
 
 // Diferenças entre CASDvest e CASDinho
 const difCourse = [
@@ -11,9 +11,9 @@ const difCourse = [
                 <p>O Processo Seletivo do CASDvest destina-se a alunos que já tenham concluído ou que concluirão o Ensino Médio em 2020.</p>,
             schoolingOptions:
             <>
-                <option value="completo">Ensino Médio completo</option>
-                <option value="3">Cursando o 3º ano do Ensino Médio em 2020</option>
-                <option value="2">Cursando o 2º ano do Ensino Médio em 2020</option>
+                <option value="Ensino Médio completo">Ensino Médio completo</option>
+                <option value="Cursando o 3º ano do Ensino Médio em 2020">Cursando o 3º ano do Ensino Médio em 2020</option>
+                <option value="Cursando o 2º ano do Ensino Médio em 2020">Cursando o 2º ano do Ensino Médio em 2020</option>
             </>,
             // Pergunta de tipo de escola (legenda)
             kindSchoolText:
@@ -105,7 +105,6 @@ const difCourse = [
                 <option value="XENOFONTE STRABAO DE CASTRO PROFESSOR">XENOFONTE STRABAO DE CASTRO PROFESSOR</option>
                 <option value="YOSHIYA TAKAOKA">YOSHIYA TAKAOKA</option>
                 <option value="ZILAH FERREIRA VIAGI PASSARELLI DE CAMPOS PROFESSORA">ZILAH FERREIRA VIAGI PASSARELLI DE CAMPOS PROFESSORA</option>
-                <option value="Outra">Outra</option>
             </>,
             // Pergunta de forma de conhecimento sobre o PS (legenda)
             wayLabel: <>Como você tomou conhecimento do Processo Seletivo do CASDvest? <ast>*</ast></>
@@ -115,8 +114,8 @@ const difCourse = [
                 <p>O Processo Seletivo do CASDinho 2021 destina-se a alunos que cursarão o 8º ou 9º ano do Ensino Fundamental em 2021.</p>,
             schoolingOptions:
             <>
-                <option value="8">Cursando o 8º ano do Ensino Fundamental em 2020</option>
-                <option value="7">Cursando o 7º ano do Ensino Fundamental em 2020</option>
+                <option value="Cursando o 8º ano do Ensino Fundamental em 2020">Cursando o 8º ano do Ensino Fundamental em 2020</option>
+                <option value="Cursando o 7º ano do Ensino Fundamental em 2020">Cursando o 7º ano do Ensino Fundamental em 2020</option>
             </>,
             kindSchoolText:
                 <p>Considere a escola em que você estuda atualmente.</p>,
@@ -262,8 +261,9 @@ const difCourse = [
 ]
 
 function PersonalDataInputs({ idCourse }) {
-    const [personalData, setPersonalData] = useState({});
-    const [address, setAddress] = useState({});
+    const [personalData, setPersonalData] = useState();
+    const [errors, setErrors] = useState({});
+    const { address, setAddress } = useContext(FormRegistrationContext);
     const { formData, setFormData } = useContext(FormRegistrationContext);
 
     const infos = difCourse[0][idCourse];
@@ -316,19 +316,37 @@ function PersonalDataInputs({ idCourse }) {
             else if (day > 30) val = false;
         }
 
-        if (val) setPersonalData({...personalData, birthDate: date});
-        else setPersonalData({...personalData, birthDate: ""});
+        if (val) {
+            setPersonalData({...personalData, birthDate: date});
+            setErrors({...errors, birthDate: ""});
+        }
+        else {
+            if (date === "") {
+                setPersonalData({...personalData, birthDate: ""});
+                setErrors({...errors, birthDate: "Esse campo é obrigatório."});
+            }
+            else {
+                setPersonalData({...personalData, birthDate: "inval"});
+                setErrors({...errors, birthDate: "Insira uma data válida no formato indicado."});
+            }
+        }
     }
 
     // Validação do nome do responsável
     const NomeRegEx = RegExp(/[A-ZÁÉÍÓÚa-záéíóúç]+[ ]+([A-ZÁÉÍÓÚa-záéíóúç]+[ ]*)+/);
     function handleRelativeName(e) {
-        if(NomeRegEx.test(e.target.value)) {
-            var handledName = handleStrings(e.target.value);
+        var name = e.target.value;
+
+        if(NomeRegEx.test(name)) {
+            var handledName = handleStrings(name);
             setPersonalData({...personalData, relativeName: handledName});
+            setErrors({...errors, relativeName: ""});
         }
-        else
+        else {
             setPersonalData({...personalData, relativeName: ""});
+            if (name == "") setErrors({...errors, relativeName: "Esse campo é obrigatório."});
+            else setErrors({...errors, relativeName: "Escreva o nome completo do responsável."});
+        }
     }
 
     // Validação dos telefones
@@ -351,10 +369,17 @@ function PersonalDataInputs({ idCourse }) {
     function handlePhone1(e) {
         var phone = handlePhone(e.target.value);
         setPersonalData({...personalData, phone1: phone});
+
+        if (e.target.value === "") setErrors({...errors, phone1: "Esse campo é obrigatório."});
+        else if (phone === "") setErrors({...errors, phone1: "Insira um número de telefone válido no formato indicado."});
+        else setErrors({...errors, phone1: ""});
     }
     function handlePhone2(e) {
         var phone = handlePhone(e.target.value);
         setPersonalData({...personalData, phone2: phone});
+
+        if (e.target.value === "" || phone !== "") setErrors({...errors, phone2: ""});
+        else if (phone === "") setErrors({...errors, phone2: "Insira um número de telefone válido no formato indicado."});
     }
 
     // Validação do CEP
@@ -362,94 +387,50 @@ function PersonalDataInputs({ idCourse }) {
     function handleCEP(e) {
         if(CEPRegEx.test(e.target.value)) {
             setAddress({...address, cep: e.target.value});
+            setErrors({...errors, cep: ""});
         }
         else {
             setAddress({...address, cep: ""});
+            setErrors({...errors, cep: "Insira um CEP válido."});
         }
     }
 
     // Estrutura de perguntas condicionais
     /// function handle...(e)
     /// var ... = e.target.value --> variável com o input da pergunta-pai
-    /// if --> lida com o caso em que a opção "outro" foi escolhida
-    //// exibe label e input da nova pergunta, tornando-a obrigatória, e salva "outro" no db
-    /// else
-    //// esconde label e input da nova pergunta, esvazia campo, e salva resposta-pai no db e
-    //// string vazia para condicional
+    /// if --> salva valor
+    /// else --> salva valor e string vazia para pergunta Outro
 
     // Pergunta condicional do parentesco
     function handleKinship(e) {
         var par = e.target.value;
 
-        if (par === "Outro") {
-            document.getElementById("labelKinship").removeAttribute("hidden");
-            document.getElementById("otherKinship").setAttribute("type","text");
-            document.getElementById("otherKinship").setAttribute("required","");
-            setPersonalData({...personalData, kinship: par});
-        }
-        else {
-            document.getElementById("labelKinship").setAttribute("hidden","");
-            document.getElementById("otherKinship").setAttribute("type","hidden");
-            document.getElementById("otherKinship").setAttribute("value","");
-            document.getElementById("otherKinship").removeAttribute("required");
-            setPersonalData({...personalData, kinship: par, otherKinship: ''});
-        }
+        if (par === "Outro") setPersonalData({...personalData, kinship: par});
+        else setPersonalData({...personalData, kinship: par, otherKinship: ''});
     }
 
     // Pergunta condicional de necessidade especial
     function handleSpecialNecessity(e) {
         var nec = e.target.value;
 
-        if(nec == "Sim") {
-            document.getElementById("labelSpecialNecessity").removeAttribute("hidden");
-            document.getElementById("whichNecessity").setAttribute("type","text");
-            document.getElementById("whichNecessity").setAttribute("required","");
-            setPersonalData({...personalData, ifSpecialNecessity: nec});
-        }
-        else {
-            document.getElementById("labelSpecialNecessity").setAttribute("hidden","");
-            document.getElementById("whichNecessity").setAttribute("type","hidden");
-            document.getElementById("whichNecessity").setAttribute("value","");
-            document.getElementById("whichNecessity").removeAttribute("required");
-            setPersonalData({...personalData, ifSpecialNecessity: nec, whichNecessity: ''});
-        }
+        if(nec == "Sim") setPersonalData({...personalData, ifSpecialNecessity: nec});
+        else setPersonalData({...personalData, ifSpecialNecessity: nec, whichNecessity: ''});
     }
 
     // Pergunta condicional de escola
     function handleSchool(e) {
         var esc = e.target.value;
 
-        if (esc === "Outra") {
-            document.getElementById("labelSchool").removeAttribute("hidden");
-            document.getElementById("otherSchool").setAttribute("type","text");
-            document.getElementById("otherSchool").setAttribute("required","");
-            setPersonalData({...personalData, school: esc});
-        }
-        else {
-            document.getElementById("labelSchool").setAttribute("hidden","");
-            document.getElementById("otherSchool").setAttribute("type","hidden");
-            document.getElementById("otherSchool").setAttribute("value","");
-            document.getElementById("otherSchool").removeAttribute("required");
-            setPersonalData({...personalData, school: esc, otherSchool: ''});
-        }
+        if (esc === "Outra") setPersonalData({...personalData, school: esc});
+        else setPersonalData({...personalData, school: esc, otherSchool: ''});
     }
 
     // Pergunta condicional de forma de conhecimento do PS
     function handleWay(e) {
         var fo = e.target.value;
 
-        if (fo === "outro") {
-            document.getElementById("labelWay").removeAttribute("hidden");
-            document.getElementById("otherWay").setAttribute("type","text");
-            document.getElementById("otherWay").setAttribute("required","");
-            setPersonalData({...personalData, wayPS: fo});
-        }
-        else {
-            document.getElementById("labelWay").setAttribute("hidden","");
-            document.getElementById("otherWay").setAttribute("type","hidden");
-            document.getElementById("otherWay").setAttribute("value","");
-            setPersonalData({...personalData, wayPS: fo, otherWay: ''});
-        }
+        if (fo === "Outro") setPersonalData({...personalData, wayPS: fo});
+        else setPersonalData({...personalData, wayPS: fo, otherWay: ''});
     }
 
     return (
@@ -457,30 +438,41 @@ function PersonalDataInputs({ idCourse }) {
             <h3>Dados pessoais</h3>
 
             <label htmlFor="gender">Gênero <ast>*</ast></label>
-            <select id="gender" required
+            <select id="gender"
             onChange={e => {const newData = {...personalData, gender: e.target.value}; setPersonalData(newData);}}>
+                <option value={formData.gender} selected disabled hidden>{formData.gender}</option>
                 <option value=""></option>
                 <option value="Feminino">Feminino</option>
                 <option value="Masculino">Masculino</option>
             </select>
+            {(formData.tryNext === true && (!formData.gender || formData.gender === "")) ? 
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
             <label htmlFor="birthDate">Data de nascimento <ast>*</ast></label>
             <p>Escreva no formato DD/MM/AAAA.</p>
             <input 
-                type="text" id="birthDate" required placeholder="DD/MM/AAAA"
+                type="text" id="birthDate" 
+                placeholder={(!formData.birthDate || formData.birthDate === "") ? "DD/MM/AAAA": formData.birthDate}
                 onChange={handleDate}
             />
+            {(formData.tryNext === true && (!formData.birthDate || formData.birthDate === "")) ? 
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage>
+            : <ErrorMessage>{errors.birthDate}</ErrorMessage>}
 
             <label htmlFor="relativeName">Nome de um responsável <ast>*</ast></label>
             <p>Conforme consta no documento de identidade.</p>
             <input 
-                type="text" id="relativeName" required
+                type="text" id="relativeName" placeholder={formData.relativeName}
                 onChange={handleRelativeName}
             />
+            {(formData.tryNext === true && (!formData.relativeName || formData.relativeName === "")) ? 
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> 
+            : <ErrorMessage>{errors.relativeName}</ErrorMessage>}
 
             <label htmlFor="kinship">Parentesco do responsável <ast>*</ast></label>
-            <select id="kinship" required
+            <select id="kinship" 
             onChange={handleKinship}>
+                <option value={formData.kinship} selected disabled hidden>{formData.kinship}</option>
                 <option value=""></option>
                 <option value="Mãe">Mãe</option>
                 <option value="Pai">Pai</option>
@@ -492,75 +484,96 @@ function PersonalDataInputs({ idCourse }) {
                 <option value="Irmão">Irmão</option>
                 <option value="Outro">Outro</option>
             </select>
+            {(formData.tryNext === true && (!formData.kinship || formData.kinship === "")) ? 
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
-            <label hidden htmlFor="otherKinship" id="labelKinship">Outro parentesco: <ast>*</ast></label>
+            {formData.kinship === "Outro" ?
+            <><label htmlFor="otherKinship" id="labelKinship">Outro parentesco: <ast>*</ast></label>
             <input
-                type="hidden" id="otherKinship"
+                type="text" id="otherKinship" placeholder={formData.otherKinship}
                 onChange={e => {var handledKinship = handleStrings(e.target.value);
                                 const newData = {...personalData, otherKinship: handledKinship}; setPersonalData(newData);}}
-            />
+            /></> : null}
+            {(formData.tryNext === true && formData.kinship === "Outro" && (!formData.otherKinship || formData.otherKinship === "")) ?
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
             <label htmlFor="phone1">Telefone 1 <ast>*</ast></label>
             <p>Insira apenas os números, incluindo DDD.</p>
             <input 
-                type="text" id="phone1" required
+                type="text" id="phone1" placeholder={formData.phone1}
                 onChange={handlePhone1}
             />
+            {(formData.tryNext === true && (!formData.phone1 || formData.phone1 === "")) ? 
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> 
+            : <ErrorMessage>{errors.phone1}</ErrorMessage>}
 
             <label htmlFor="phone2">Telefone 2</label>
             <p>Insira apenas os números, incluindo DDD.</p>
             <input 
-                type="text" id="phone2"
+                type="text" id="phone2" placeholder={formData.phone2}
                 onChange={handlePhone2}
             />
+            <ErrorMessage>{errors.phone2}</ErrorMessage>
 
             <label htmlFor="street">Endereço <ast>*</ast></label>
             <p>Nome da rua, avenida ou correspondente (sem número ou complemento).</p> 
             <input 
-                type="name" id="street" required
+                type="name" id="street" placeholder={formData.address ? formData.address.street : null}
                 onChange={e => {var handledStreet = handleStrings(e.target.value);
                                 const newData = {...address, street: handledStreet}; setAddress(newData);}}
             />
+            {(formData.tryNext === true && (!formData.address.street || formData.address.street === "")) ? 
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
             
             <label htmlFor="numberStreet">Número <ast>*</ast></label>
             <p>Número da residência.</p>
             <input 
-                type="number" id="numberStreet" required
+                type="number" id="numberStreet" placeholder={formData.address ? formData.address.numberStreet : null}
                 onChange={e => {const newData = {...address, numberStreet: e.target.value}; setAddress(newData);}}
             />
+            {(formData.tryNext === true && (!formData.address.numberStreet || formData.address.numberStreet === "")) ? 
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
             <label htmlFor="additionalAddress">Complemento</label>
             <p>Complemento do endereço, se houver.</p>
             <input 
-                type="text" id="additionalAddress" required
+                type="text" id="additionalAddress" placeholder={formData.address ? formData.address.additionalAddress : null}
                 onChange={e => {var handledAdditional = handleStrings(e.target.value);
                                 const newData = {...address, additionalAddress: handledAdditional}; setAddress(newData);}}
             />
 
             <label htmlFor="neighborhood">Bairro <ast>*</ast></label>    
             <input
-                type="name" id="neighborhood" required
+                type="name" id="neighborhood" placeholder={formData.address ? formData.address.neighborhood : null}
                 onChange={e => {var handledNeighborhood = handleStrings(e.target.value);
                                 const newData = {...address, neighborhood: handledNeighborhood}; setAddress(newData);}}
             />
+            {(formData.tryNext === true && (!formData.address.neighborhood || formData.address.neighborhood === "")) ? 
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
             <label htmlFor="cep">CEP <ast>*</ast></label>
             <p>Insira apenas os números.</p>
             <input
-                type="number" id="cep" required
+                type="number" id="cep" placeholder={formData.address ? formData.address.cep : null}
                 onChange={handleCEP}
             />
+            {(formData.tryNext === true && (!formData.address.cep || formData.address.cep === "")) ? 
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage>
+            : <ErrorMessage>{errors.cep}</ErrorMessage>}
 
             <label htmlFor="city">Cidade <ast>*</ast></label>
             <input
-                type="name" id="city" required
+                type="name" id="city" placeholder={formData.address ? formData.address.city : null}
                 onChange={e => {var handledCity = handleStrings(e.target.value);
                                 const newData = {...address, city: handledCity}; setAddress(newData);}}
             />
+            {(formData.tryNext === true && (!formData.address.city || formData.address.city === "")) ? 
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
             <label htmlFor="state">Estado <ast>*</ast></label>
-            <select id="state" required
+            <select id="state"
             onChange={e => {const newData = {...address, state: e.target.value}; setAddress(newData);}}>
+                <option value={formData.address ? formData.address.state : null} selected disabled hidden>{formData.address ? formData.address.state : null}</option>
                 <option value=""></option>
                 <option value="AC">AC</option>
                 <option value="AL">AL</option>
@@ -590,80 +603,108 @@ function PersonalDataInputs({ idCourse }) {
                 <option value="SP">SP</option>
                 <option value="TO">TO</option>
             </select>
+            {(formData.tryNext === true && (!formData.address.state || formData.address.state === "")) ? 
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
             <label htmlFor="specialNecessity">Você possui alguma necessidade especial? <ast>*</ast></label>
-            <select id="specialNecessity" required
+            <select id="specialNecessity"
             onChange={handleSpecialNecessity}>
+                <option value={formData.ifSpecialNecessity} selected disabled hidden>{formData.ifSpecialNecessity}</option>
                 <option value=""></option>
                 <option value="Não">Não</option>
                 <option value="Sim">Sim</option>
             </select>
+            {(formData.tryNext === true && (!formData.ifSpecialNecessity || formData.ifSpecialNecessity === "")) ? 
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
-            <label hidden htmlFor="whichNecessity" id="labelSpecialNecessity">Qual sua necessidade especial? <ast>*</ast></label>
+            {formData.ifSpecialNecessity === "Sim" ?
+            <><label htmlFor="whichNecessity" id="labelSpecialNecessity">Qual sua necessidade especial? <ast>*</ast></label>
             <input
-                type="hidden" id="whichNecessity"
+                type="text" id="whichNecessity" placeholder={formData.whichNecessity}
                 onChange={e => {var handledNecessity = handleStrings(e.target.value);
                                 const newData = {...personalData, whichNecessity: handledNecessity}; setPersonalData(newData);}}
-            />
+            /></> : null}
+            {(formData.tryNext === true && formData.ifSpecialNecessity === "Sim" && (!formData.whichNecessity || formData.whichNecessity === "")) ?
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
             <label htmlFor="schooling">Escolaridade <ast>*</ast></label>
             {infos.schoolingText}
-            <select id="schooling" required
+            <select id="schooling"
             onChange={e => {const newData = {...personalData, schooling: e.target.value}; setPersonalData(newData);}}>
+                <option value={formData.schooling} selected disabled hidden>{formData.schooling}</option>
                 <option value=""></option>
                 {infos.schoolingOptions}
             </select>
+            {(formData.tryNext === true && (!formData.schooling || formData.schooling === "")) ?
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
             <label htmlFor="kindSchool">Tipo de escola <ast>*</ast></label>
             {infos.kindSchoolText}
-            <select id="kindSchool" required
+            <select id="kindSchool"
             onChange={e => {const newData = {...personalData, kindSchool: e.target.value}; setPersonalData(newData);}}>
+                <option value={formData.kindSchool} selected disabled hidden>{formData.kindSchool}</option>
                 <option value=""></option>
-                <option value="PF">Pública Federal</option>
-                <option value="PE">Pública Estadual</option>
-                <option value="PM">Pública Municipal</option>
-                <option value="PV">Privada</option>
+                <option value="Pública Federal">Pública Federal</option>
+                <option value="Pública Estadual">Pública Estadual</option>
+                <option value="Pública Municipal">Pública Municipal</option>
+                <option value="Privada">Privada</option>
             </select>
+            {(formData.tryNext === true && (!formData.kindSchool || formData.kindSchool === "")) ?
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
             <label htmlFor="school">Nome da escola <ast>*</ast></label>
             {infos.schoolText}
-            <select id="school" required
+            <select id="school"
             onChange={handleSchool}>
                 { /* Lista de escolas tirada do site do governo, adaptada para código em Excel */ }
+                <option value={formData.school} selected disabled hidden>{formData.school}</option>
                 <option value=""></option>
                 {infos.schoolOptions}
+                <option value="Outra">Outra</option>
             </select>
+            {(formData.tryNext === true && (!formData.school || formData.school === "")) ?
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
-            <label hidden htmlFor="otherSchool" id="labelSchool">Outra escola: <ast>*</ast></label>
+            {formData.school === "Outra" ?
+            <><label htmlFor="otherSchool" id="labelSchool">Outra escola: <ast>*</ast></label>
             <input
-                type="hidden" id="otherSchool"
+                type="text" id="otherSchool" placeholder={formData.otherSchool}
                 onChange={e => {var handledSchool = handleStrings(e.target.value);
                                 const newData = {...personalData, otherSchool: handledSchool}; setPersonalData(newData);}}
-            />
+            /></> : null}
+            {(formData.tryNext === true && formData.school === "Outra" && (!formData.otherSchool || formData.otherSchool === "")) ?
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
             <label htmlFor="wayPS">{infos.wayLabel}</label>
-            <select id="wayPS" required
+            <select id="wayPS"
             onChange={handleWay}>
+                <option value={formData.wayPS} selected disabled hidden>{formData.wayPS}</option>
                 <option value=""></option>
-                <option value="alunos">Indicação de alunos do CASD</option>
-                <option value="voluntarios">Indicação de voluntários do CASD</option>
-                <option value="conhecidos">Indicação de outros conhecidos</option>
-                <option value="redes-sociais">Redes sociais (Facebook e Instagram)</option>
-                <option value="internet">Internet (site e mecanismos de busca)</option>
-                <option value="imprensa">Imprensa (TV, rádio e jornal)</option>
-                <option value="outdoor">Outdoor em ônibus</option>
-                <option value="visita">Visita à escola</option>
-                <option value="outro">Outro</option>
+                <option value="Indicação de alunos do CASD">Indicação de alunos do CASD</option>
+                <option value="Indicação de voluntários do CASD">Indicação de voluntários do CASD</option>
+                <option value="Indicação de outros conhecidos">Indicação de outros conhecidos</option>
+                <option value="Redes sociais (Facebook e Instagram)">Redes sociais (Facebook e Instagram)</option>
+                <option value="Internet (site e mecanismos de busca)">Internet (site e mecanismos de busca)</option>
+                <option value="Imprensa (TV, rádio e jornal)">Imprensa (TV, rádio e jornal)</option>
+                <option value="Outdoor em ônibus">Outdoor em ônibus</option>
+                <option value="Visita à escola">Visita à escola</option>
+                <option value="Outro">Outro</option>
             </select>
+            {(formData.tryNext === true && (!formData.wayPS || formData.wayPS === "")) ?
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
-            <label hidden htmlFor="otherWay" id="labelWay">Outra forma: <ast>*</ast></label>
+            {formData.wayPS === "Outro" ?
+            <><label htmlFor="otherWay" id="labelWay">Outra forma: <ast>*</ast></label>
             <input
-                type="hidden" id="otherWay"
+                type="text" id="otherWay" placeholder={formData.otherWay}
                 onChange={e => {var handledWay = handleStrings(e.target.value);
                                 const newData = {...personalData, otherWay: handledWay}; setPersonalData(newData);}}
-            />
+            /></> : null}
+            {(formData.tryNext === true && formData.wayPS === "Outro" && (!formData.otherWay || formData.otherWay === "")) ?
+            <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> : null}
 
-            { console.log(formData) }
+            {(formData.tryNext === true && formData.disabledButton === true) ? 
+            <GeneralErrorMessage>Corrija os erros nos campos indicados acima.</GeneralErrorMessage> : null}
         </Container>
     );
 }

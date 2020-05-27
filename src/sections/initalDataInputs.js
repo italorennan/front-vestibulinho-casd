@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Container, ErrorMessage } from '../../pages/FormRegistration/styles';
-import FormRegistrationContext from '../../pages/FormRegistration/context';
+import { Container, ErrorMessage, GeneralErrorMessage } from '../pages/FormRegistration/styles';
+import FormRegistrationContext from '../pages/FormRegistration/context';
 
 // Adaptar diferenças entre CASDvest e CASDinho
 /// CPF obrigatório apenas no CASDvest
@@ -21,7 +21,7 @@ function InitialDataInputs({ idCourse }) {
   const { formData, setFormData } = useContext(FormRegistrationContext);
   const [verEmail, setVerEmail] = useState({email1: "erro", email2:"erro"});
 
-  useEffect(() => setFormData(initialData), [initialData, setFormData, setInitialData]);
+  useEffect(() => setFormData({...formData, ...initialData}), [initialData, setFormData, setInitialData]);
 
   // Estrutura de perguntas com validação por padrão:
   /// const ... = RegExp(...); --> expressão regular que define o padrão
@@ -46,29 +46,35 @@ function InitialDataInputs({ idCourse }) {
   }
 
   // Validação do nome
-  const NomeRegEx = RegExp(/[A-ZÁÉÍÓÚa-záéíóúç]+[ ]+([A-ZÁÉÍÓÚa-záéíóúç]+[ ]*)+/);
+  const NameRegEx = RegExp(/[A-ZÁÉÍÓÚa-záéíóúç]+[ ]+([A-ZÁÉÍÓÚa-záéíóúç]+[ ]*)+/);
   function handleName(e) {
-      if(NomeRegEx.test(e.target.value)) {
-          var handledName = handleStrings(e.target.value);
+      var name = e.target.value;
+
+      if(NameRegEx.test(name)) {
+          var handledName = handleStrings(name);
           setInitialData({...initialData, name: handledName});
-            errors.nome = "";
+          setErrors({...errors, name: ""});
       }
       else {
           setInitialData({...initialData, name: ""});
-          setErrors({...errors, nome: "Escreva seu nome completo"});
+          if (name == "") setErrors({...errors, name: "Esse campo é obrigatório."});
+          else setErrors({...errors, name: "Escreva seu nome completo."});
       }
   }
 
   // Validação do RG
-  const RGRegEx = RegExp(/^[0-9]*([0-9Xx]){1}$/);
+  const RGRegEx = RegExp(/^[A-Z]*[0-9]*([0-9Xx]){1}$/);
   function handleRG(e) {
-      if(RGRegEx.test(e.target.value)) {
-          setInitialData({...initialData, rg: e.target.value});
-          errors.rg = "";
+      var RG = handleStrings(e.target.value);
+
+      if(RGRegEx.test(RG)) {
+          setInitialData({...initialData, rg: RG});
+          setErrors({...errors, rg: ""});
       }
       else {
           setInitialData({...initialData, rg: ""});
-          setErrors({...errors, rg: "Número de RG inválido"});
+          if (RG == "") setErrors({...errors, rg: "Esse campo é obrigatório."});
+          else setErrors({...errors, rg: "Número de RG inválido."});
       }
   }
 
@@ -102,12 +108,17 @@ function InitialDataInputs({ idCourse }) {
         
         if (validity) setInitialData({...initialData, cpf: n});
         else setInitialData({...initialData, cpf: "inval"});
-        errors.cpf = "";
+        setErrors({...errors, cpf: ""});
       }
       else {
-        if (e.target.value == "") setInitialData({...initialData, cpf: ""});
-        else setInitialData({...initialData, cpf: "inval"});
-        setErrors({...errors, cpf: "Número de CPF inválido"});
+        if (e.target.value == "") {
+          setInitialData({...initialData, cpf: ""});
+          setErrors({...errors, cpf: "Esse campo é obrigatório."});
+        }
+        else {
+          setInitialData({...initialData, cpf: "inval"});
+          setErrors({...errors, cpf: "Número de CPF inválido."});
+        }
       }
   }
 
@@ -117,19 +128,19 @@ function InitialDataInputs({ idCourse }) {
       var aux = e.target.value;
 
       if (!emailRegExp.test(aux)) {
-          setErrors({...errors, email: "Email inválido"});
-      } else {
-          errors.email = "";
-      }
-      if (aux === verEmail.email2) {
-          setInitialData({...initialData, email: aux});
-          setVerEmail({...verEmail, email1: aux});
-          //errors.email = "";
-      }
+          setErrors({...errors, email: "Email inválido.", confirmEmail: ""});
+      } 
       else {
-          setInitialData({...initialData, email: "error"});
-          setVerEmail({...verEmail, email1: aux});
-          //setErrors({...errors, email: "Email inválido"});
+        if (aux === verEmail.email2) {
+            setInitialData({...initialData, email: aux});
+            setVerEmail({...verEmail, email1: aux});
+            setErrors({...errors, email: "", confirmEmail: ""});
+        }
+        else {
+            setInitialData({...initialData, email: "error"});
+            setVerEmail({...verEmail, email1: aux});
+            setErrors({...errors, email: "", confirmEmail: "Emails não conferem."});
+        }
       }
   }
   function handleConfirmEmail(e) {
@@ -138,12 +149,12 @@ function InitialDataInputs({ idCourse }) {
       if (aux === verEmail.email1) {
           setInitialData({...initialData, email: aux});
           setVerEmail({...verEmail, email2: aux});
-          errors.confirmaremail = "";
+          setErrors({...errors, confirmEmail: ""});
       }
       else {
           setInitialData({...initialData, email: "error"});
-          setVerEmail({...verEmail, email2:aux});
-          setErrors({...errors, confirmaremail: "Emails não conferem"});
+          setVerEmail({...verEmail, email2: aux});
+          setErrors({...errors, confirmEmail: "Emails não conferem."});
       }
   }
   
@@ -154,43 +165,54 @@ function InitialDataInputs({ idCourse }) {
       <label htmlFor="name">Nome completo <ast>*</ast></label>
       <p>Conforme consta no documento de identidade.</p>
       <input 
-          type="text" id="name" required
+          type="text" id="name" placeholder={formData.name}
           onChange={handleName}
       />
-      <ErrorMessage>{errors.nome}</ErrorMessage>
-
+      {(formData.tryNext === true && (!formData.name || formData.name === "")) ? 
+      <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> 
+      : <ErrorMessage>{errors.name}</ErrorMessage>}
+      
       <label htmlFor="rg">RG <ast>*</ast></label>
       <p>Escreva apenas os números.</p>
       <input 
-          type="text" id="rg" required
+          type="text" id="rg" placeholder={formData.rg}
           onChange={handleRG}
       />
-      <ErrorMessage>{errors.rg}</ErrorMessage>
+      {(formData.tryNext === true && (!formData.rg || formData.rg === "")) ? 
+      <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> 
+      : <ErrorMessage>{errors.rg}</ErrorMessage>}
       
       { /* CPF obrigatório apenas para o CASDvest */ }
       <label htmlFor="cpf" id="labelCpf">{difCourse[0][idCourse].CPFTitle}</label>
       <p>Escreva apenas os números.</p>
       <input 
-          type="number" id="cpf"
+          type="number" id="cpf" placeholder={formData.cpf != "cpf" ? formData.cpf : null}
           onChange={handleCPF}
       />
-      <ErrorMessage>{errors.cpf}</ErrorMessage>
+      {(formData.tryNext === true && (!formData.cpf || formData.cpf === "") && idCourse === "casdvest") ? 
+      <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> 
+      : <ErrorMessage>{errors.cpf}</ErrorMessage>}
 
       <label htmlFor="email">E-mail <ast>*</ast></label>
       <input 
-          type="email" id="email" required
+          type="email" id="email" placeholder={formData.email != "error" ? formData.email : null}
           onChange={handleEmail}
       />
-      <ErrorMessage>{errors.email}</ErrorMessage>
+      {(formData.tryNext === true && (!formData.email || formData.email === "")) ? 
+      <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> 
+      : <ErrorMessage>{errors.email}</ErrorMessage>}
 
       <label htmlFor="confirmEmail">Confirmar e-mail <ast>*</ast></label>
       <input 
-          type="email" id="confirmEmail" required
+          type="email" id="confirmEmail" placeholder={formData.email != "error" ? formData.email : null}
           onChange={handleConfirmEmail}
       />
-      <ErrorMessage>{errors.confirmaremail}</ErrorMessage>
+      {(formData.tryNext === true && (!formData.email || formData.email === "")) ? 
+      <ErrorMessage>Esse campo é obrigatório.</ErrorMessage> 
+      : <ErrorMessage>{errors.confirmEmail}</ErrorMessage>}
 
-      { console.log(formData) }
+      {(formData.tryNext === true && formData.disabledButton === true) ? 
+      <GeneralErrorMessage>Corrija os erros nos campos indicados acima.</GeneralErrorMessage> : null}
     </Container>
   );
 }
