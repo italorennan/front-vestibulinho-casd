@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import FormRegistrationContext from './context';
-import { Container, Button, Box } from '../../pages/FormRegistration/styles';
+import { Container, Button, Box, PageButton } from '../../pages/FormRegistration/styles';
 import InfoForm from '../../sections/infoForm';
 import InitialDataInputs from '../../sections/initalDataInputs';
 import PersonalDataInputs from '../../sections/personalDataInputs';
@@ -48,7 +48,7 @@ function FormRegistration({ idCourse }) {
           && formData.email && formData.email !== "error"
           && formData.name
           && formData.rg) {
-            setFormData({...formData, disabledButton: false });
+            setFormData({...formData, disabledButton: false, blockPage1: false });
           }
       
       if (actualSection === 2 // Validações de campos normais obrigatórios
@@ -76,19 +76,19 @@ function FormRegistration({ idCourse }) {
                     || (formData.wayPS === "Outro" && (!formData.otherWay || formData.otherWay === ""))
                     || (formData.kinship === "Outro" && (!formData.otherKinship || formData.otherKinship === ""))
                     || (formData.ifSpecialNecessity === "Sim" && (!formData.whichNecessity || formData.whichNecessity === "")))) {
-                      setFormData({...formData, disabledButton: false }); 
+                      setFormData({...formData, disabledButton: false, blockPage2: false }); 
                     }
             }
       } 
 
       if (actualSection === 3 && formData.privateSpace && formData.privateSpace !== "") {
-        setFormData({...formData, disabledButton: false });
+        setFormData({...formData, disabledButton: false, blockPage3: false });
       }
 
       if (actualSection === 4 && formData.exemptionRequest) {
         if ((formData.exemptionRequest === "nao") 
             || (formData.exemptionRequest === "sim" && formData.justification && formData.justification !== "")) {
-                setFormData({...formData, disabledButton: false });
+                setFormData({...formData, disabledButton: false, blockPage4: false });
             }
       }
 
@@ -99,7 +99,7 @@ function FormRegistration({ idCourse }) {
         || !formData.name
         || !formData.rg)
       ) {
-        setFormData({...formData, disabledButton: true });
+        setFormData({...formData, disabledButton: true, blockPage1: true });
       }
       if (actualSection === 2) {
         if (!formData.address
@@ -117,7 +117,7 @@ function FormRegistration({ idCourse }) {
           || (formData.wayPS === "Outro" && (!formData.otherWay || formData.otherWay === ""))
           || (formData.kinship === "Outro" && (!formData.otherKinship || formData.otherKinship === ""))
           || (formData.ifSpecialNecessity === "Sim" && (!formData.whichNecessity || formData.whichNecessity === ""))) {
-            setFormData({...formData, disabledButton: true });
+            setFormData({...formData, disabledButton: true, blockPage2: true });
         }
         else if(!formData.address.cep
           || !formData.address.city
@@ -125,16 +125,16 @@ function FormRegistration({ idCourse }) {
           || !formData.address.numberStreet
           || !formData.address.state
           || !formData.address.street) {
-            setFormData({...formData, disabledButton: true });
+            setFormData({...formData, disabledButton: true, blockPage2: true });
         }
       } 
       if (actualSection === 3 && (!formData.privateSpace || formData.privateSpace === "")) {
-        setFormData({...formData, disabledButton: true });
+        setFormData({...formData, disabledButton: true, blockPage3: true });
       }
       if (actualSection === 4 && 
         (!formData.exemptionRequest || formData.exemptionRequest === ""
         || (formData.exemptionRequest === "sim" && !formData.justification))) {
-            setFormData({...formData, disabledButton: true });
+            setFormData({...formData, disabledButton: true, blockPage4: true });
       }
     }
   }, [formData]);
@@ -146,23 +146,61 @@ function FormRegistration({ idCourse }) {
 
   async function handleNextButton() {
     if (!formData.disabledButton && formData.disabledButton === false) {
-
       if(actualSection === 1 ){
-         const respGET = await api.get(`/candidate/checkCandidate?rg=${formData.rg}`);
-         if(!respGET.data){
-            setActualSection(actualSection+1);
-            console.log("Candidato não encontrado")
-         }
-         else
-            alert("Este RG já está registrado!")
+        const respGET = await api.get(`/candidate/checkCandidate?rg=${formData.rg}`);
+        if(!respGET.data){
+           setActualSection(actualSection+1);
+           console.log("Candidato não encontrado")
+        }
+        else
+           alert("Este RG já está registrado!")
       }
+      
       else if (actualSection < sections.length-1) {
         setActualSection(actualSection+1);
+      }
+
+      setFormData({...formData, tryNext: false});
+    }
+    else setFormData({...formData, tryNext: true});
+  }
+
+  function handlePageButton(e) {
+    e.preventDefault();
+    if (!formData.disabledButton && formData.disabledButton === false) {
+      switch(e.target.className) {
+        case "page0": setActualSection(0); break;
+        case "page1": setActualSection(1); break;
+        case "page2": if(!formData.blockPage1 && formData.blockPage1 === false) 
+                        setActualSection(2); 
+                      break;
+        case "page3": if(!formData.blockPage1 && formData.blockPage1 === false
+                        && !formData.blockPage2 && formData.blockPage2 === false)
+                        setActualSection(3); 
+                      break;
+        case "page4": if(!formData.blockPage1 && formData.blockPage1 === false
+                        && !formData.blockPage2 && formData.blockPage2 === false 
+                        && !formData.blockPage3 && formData.blockPage3 === false)
+                        setActualSection(4); 
+                      break;
+        case "page5": if(!formData.blockPage1 && formData.blockPage1 === false
+                        && !formData.blockPage2 && formData.blockPage2 === false 
+                        && !formData.blockPage3 && formData.blockPage3 === false
+                        && !formData.blockPage4 && formData.blockPage4 === false)
+                        setActualSection(5); 
+                      break;
       }
       setFormData({...formData, tryNext: false});
     }
     else setFormData({...formData, tryNext: true});
   }
+
+  document.addEventListener('keypress', function(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      //if(!formData.disabledButton && formData.disabledButton === false) handleNextButton();
+    }
+  });
 
   async function handleSubmit(e) {
     e.preventDefault(); 
@@ -173,25 +211,32 @@ function FormRegistration({ idCourse }) {
       console.log(`VERIFICAR NO BANCO SE JÁ EXISTE O RG ${formData.rg} CADASTRADO`);
     }
     
-
-      if(actualSection === sections.length-1) {
-         console.log("oi");
-         const { name, rg, cpf, email, privateSpace, registrationFee } = formData; // ------- [TODO] IR ADICIONANDO CAMPOS QDE CADA SECTION QUE SERÃO SALVOS
-         const dataToSave = { name, rg, cpf, email, privateSpace, registrationFee };
-         console.log('DADOS A SEREM SALVOS NO BANCO', formData);
-         
-         const newCandidate = await api.post('/candidate/createCandidate',
-            JSON.stringify(formData), { headers: { 'Content-Type': 'application/json'}}  
-         );
-         console.log("Novo candidato Criado", newCandidate);
-      }
-   }
+    if(actualSection === sections.length-1) {
+        console.log("oi");
+        const { name, rg, cpf, email, privateSpace, registrationFee } = formData; // ------- [TODO] IR ADICIONANDO CAMPOS QDE CADA SECTION QUE SERÃO SALVOS
+        const dataToSave = { name, rg, cpf, email, privateSpace, registrationFee };
+        console.log('DADOS A SEREM SALVOS NO BANCO', formData);
+        
+        const newCandidate = await api.post('/candidate/createCandidate',
+          JSON.stringify(formData), { headers: { 'Content-Type': 'application/json'}}  
+        );
+        console.log("Novo candidato Criado", newCandidate);
+    }
+  }
 
   return (
     <FormRegistrationContext.Provider value={{ formData, setFormData, address, setAddress }}>
       <Container>
         <h1>{infosCourse[0][idCourse].infoTitle}</h1>
         <Box size={sizes[actualSection]}></Box>
+        <PageButton actualSection={actualSection}>
+          <button className="page0" onClick={handlePageButton}>Início</button>
+          <button className="page1" onClick={handlePageButton}>Dados iniciais</button>
+          <button className="page2" onClick={handlePageButton}>Dados pessoais</button>
+          <button className="page3" onClick={handlePageButton}>Vagas Privativas</button>
+          <button className="page4" onClick={handlePageButton}>Taxa de Inscrição</button>
+          <button className="page5" onClick={handlePageButton}>Confirmação</button>
+        </PageButton>
         <form onSubmit={handleSubmit}>
           {sections[actualSection]}
           {actualSection !== 0 && <Button className="btn" onClick={handlePreviousButton} id="previousButton">Anterior</Button>}

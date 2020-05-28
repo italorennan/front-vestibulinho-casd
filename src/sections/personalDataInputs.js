@@ -413,7 +413,7 @@ function PersonalDataInputs({ idCourse }) {
     function handleSpecialNecessity(e) {
         var nec = e.target.value;
 
-        if(nec == "Sim") setPersonalData({...personalData, ifSpecialNecessity: nec});
+        if(nec === "Sim") setPersonalData({...personalData, ifSpecialNecessity: nec});
         else setPersonalData({...personalData, ifSpecialNecessity: nec, whichNecessity: ''});
     }
 

@@ -133,5 +133,22 @@ export const Box = styled.div`
   background: linear-gradient(90deg, ${yellowCASD} ${props => props.size}, ${blueCASD} ${props => props.size});
   margin-left: 5vw;
   margin-right: 5vw;
+  margin-block-end: 0.5em;
   height: 5vh;
+`;
+
+export const PageButton = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-left: 5vw;
+  margin-right: 5vw;
+
+  button {
+    color: ${yellowCASD};
+    font-size: 1em;
+    background-color: ${blueCASD};
+    border: none;
+    cursor: pointer;
+  }
 `;
