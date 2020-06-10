@@ -106,9 +106,14 @@ function InitialDataInputs({ idCourse }) {
         }
         else if (n[10] != 11 - r2) validity = false;
         
-        if (validity) setInitialData({...initialData, cpf: n});
-        else setInitialData({...initialData, cpf: "inval"});
-        setErrors({...errors, cpf: ""});
+        if (validity) {
+          setInitialData({...initialData, cpf: n});
+          setErrors({...errors, cpf: ""});
+        }
+        else {
+          setInitialData({...initialData, cpf: "inval"});
+          setErrors({...errors, cpf: "Número de CPF inválido."})
+        }
       }
       else {
         if (e.target.value == "") {
