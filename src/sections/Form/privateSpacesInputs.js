@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Container, ErrorMessage, GeneralErrorMessage } from '../pages/FormRegistration/styles';
-import FormRegistrationContext from '../pages/FormRegistration/context';
+import { Container, ErrorMessage, GeneralErrorMessage } from '../../pages/FormRegistration/styles';
+import FormRegistrationContext from '../../pages/FormRegistration/context';
 
 const difCourse = [
   {

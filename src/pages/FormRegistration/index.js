@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import FormRegistrationContext from './context';
 import { Container, Button, Box, PageButton } from '../../pages/FormRegistration/styles';
-import InfoForm from '../../sections/infoForm';
-import InitialDataInputs from '../../sections/initalDataInputs';
-import PersonalDataInputs from '../../sections/personalDataInputs';
-import PrivateSpacesInputs from '../../sections/privateSpacesInputs';
-import RegistrationFeeInputs from '../../sections/registrationFeeInputs';
-import Confirmation from '../../sections/confirmation';
-import FinalPage from '../../sections/finalPage';
+import InfoForm from '../../sections/Form/infoForm';
+import InitialDataInputs from '../../sections/Form/initalDataInputs';
+import PersonalDataInputs from '../../sections/Form/personalDataInputs';
+import PrivateSpacesInputs from '../../sections/Form/privateSpacesInputs';
+import RegistrationFeeInputs from '../../sections/Form/registrationFeeInputs';
+import Confirmation from '../../sections/Form/confirmation';
+import FinalPage from '../../sections/Form/finalPage';
 
 import api from '../../services/api';
 import { act } from 'react-dom/test-utils';
