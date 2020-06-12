@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from '../pages/FormRegistration/styles';
+import { Container } from '../../pages/FormRegistration/styles';
 
 function FinalPage() {
     return (

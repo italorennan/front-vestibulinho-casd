@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import FormRegistrationContext from './context';
 import { Container, Button, Box, PageButton } from '../../pages/FormRegistration/styles';
-import InfoForm from '../../sections/infoForm';
-import InitialDataInputs from '../../sections/initalDataInputs';
-import PersonalDataInputs from '../../sections/personalDataInputs';
-import PrivateSpacesInputs from '../../sections/privateSpacesInputs';
-import RegistrationFeeInputs from '../../sections/registrationFeeInputs';
-import Confirmation from '../../sections/confirmation';
-import FinalPage from '../../sections/finalPage';
+import InfoForm from '../../sections/Form/infoForm';
+import InitialDataInputs from '../../sections/Form/initalDataInputs';
+import PersonalDataInputs from '../../sections/Form/personalDataInputs';
+import PrivateSpacesInputs from '../../sections/Form/privateSpacesInputs';
+import RegistrationFeeInputs from '../../sections/Form/registrationFeeInputs';
+import Confirmation from '../../sections/Form/confirmation';
+import FinalPage from '../../sections/Form/finalPage';
 
 import api from '../../services/api';
-import { act } from 'react-dom/test-utils';
 
 const infosCourse = [
   {
@@ -27,7 +26,7 @@ function FormRegistration({ idCourse }) {
   const [actualSection, setActualSection] = useState(0);
   const [formData, setFormData] = useState({disabledButton: false, tryNext: false});
   const [address, setAddress] = useState({});
-  const [hasRGCandidate, setHasRGCandidate] = useState(false);
+  const [hasRGCandidate] = useState(false);
   const sizes=["0%", "16.7%", "33.3%", "50%", "66.7%", "83.3%", "100%"];
 
   const sections = [
@@ -46,7 +45,7 @@ function FormRegistration({ idCourse }) {
           setFormData({...formData, disabledButton: false});
 
       if (actualSection === 1
-          && !(!formData.cpf && idCourse == "casdvest") && formData.cpf !== "inval" // CPF obrigatório apenas para CASDvest
+          && !(!formData.cpf && idCourse === "casdvest") && formData.cpf !== "inval" // CPF obrigatório apenas para CASDvest
           && formData.email && formData.email !== "error"
           && formData.name
           && formData.rg) {
@@ -96,7 +95,7 @@ function FormRegistration({ idCourse }) {
 
     } else {
       if (actualSection === 1
-        && ((!formData.cpf && idCourse == "casdvest") || formData.cpf === "inval"
+        && ((!formData.cpf && idCourse === "casdvest") || formData.cpf === "inval"
         || !formData.email || formData.email === "error"
         || !formData.name
         || !formData.rg)
@@ -139,7 +138,7 @@ function FormRegistration({ idCourse }) {
             setFormData({...formData, disabledButton: true, blockPage4: true });
       }
     }
-  }, [formData]);
+  }, [formData, actualSection, idCourse]);
 
   function handlePreviousButton() {
     setActualSection(actualSection-1);
@@ -214,9 +213,6 @@ function FormRegistration({ idCourse }) {
     }
     
     if(actualSection === sections.length-2) {
-        console.log("oi");
-        const { name, rg, cpf, email, privateSpace, registrationFee } = formData; // ------- [TODO] IR ADICIONANDO CAMPOS QDE CADA SECTION QUE SERÃO SALVOS
-        const dataToSave = { name, rg, cpf, email, privateSpace, registrationFee };
         console.log('DADOS A SEREM SALVOS NO BANCO', formData);
         
         const newCandidate = await api.post('/candidate/createCandidate',
@@ -245,7 +241,7 @@ function FormRegistration({ idCourse }) {
           {sections[actualSection]}
           {actualSection !== 0 && actualSection !== 6 && <Button className="btn" onClick={handlePreviousButton} id="previousButton">Anterior</Button>}
           {actualSection !== 5 && actualSection !== 6 && <Button className="btn" onClick={handleNextButton} checkDisabled={formData.disabledButton} id="nextButton">Próximo</Button>}
-          {actualSection == 5 && <Button className="btn" id="sendButton">Enviar</Button>}
+          {actualSection === 5 && <Button className="btn" id="sendButton">Enviar</Button>}
         </form>
         {hasRGCandidate === true ? <p>Esse RG já foi cadastrado!</p> : null}
 

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Container, ErrorMessage, GeneralErrorMessage } from '../pages/FormRegistration/styles';
-import FormRegistrationContext from '../pages/FormRegistration/context';
+import { Container, ErrorMessage, GeneralErrorMessage } from '../../pages/FormRegistration/styles';
+import FormRegistrationContext from '../../pages/FormRegistration/context';
 
 const difCourse = [
   {
@@ -27,7 +27,7 @@ function PrivateSpacesInputs({ idCourse }) {
   const [privateSpace, setPrivateSpace] = useState();
   const { formData, setFormData } = useContext(FormRegistrationContext);
 
-  useEffect(() => setFormData({...formData, ...privateSpace}), [privateSpace, setFormData, setPrivateSpace]);
+  useEffect(() => setFormData({...formData, ...privateSpace}), [formData, privateSpace, setFormData, setPrivateSpace]);
 
   function handleSelect(e) {
     setPrivateSpace({...privateSpace, privateSpace: e.target.value});

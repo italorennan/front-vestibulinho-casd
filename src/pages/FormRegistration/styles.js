@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { gray, yellow } from 'color-name';
 
 const blueCASD = "#3192b3";
 const yellowCASD = "#f9b342";

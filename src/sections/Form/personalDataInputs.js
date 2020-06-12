@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Container, ErrorMessage, GeneralErrorMessage } from '../pages/FormRegistration/styles';
-import FormRegistrationContext from '../pages/FormRegistration/context';
+import { Container, ErrorMessage, GeneralErrorMessage } from '../../pages/FormRegistration/styles';
+import FormRegistrationContext from '../../pages/FormRegistration/context';
 
 // Diferenças entre CASDvest e CASDinho
 const difCourse = [
@@ -268,7 +268,7 @@ function PersonalDataInputs({ idCourse }) {
 
     const infos = difCourse[0][idCourse];
 
-    useEffect(() => setFormData({...formData, ...personalData}), [personalData, setFormData, setPersonalData]);
+    useEffect(() => setFormData({...formData, ...personalData}), [formData, personalData, setFormData, setPersonalData]);
     useEffect(() => setPersonalData({...personalData, address: address}), [address, setPersonalData]);
 
     // Função para tratar strings: torna tudo maiúsculo, remove acentos e espaços extras
@@ -306,12 +306,12 @@ function PersonalDataInputs({ idCourse }) {
             var year = parseInt(date[6] + date[7] + date[8] + date[9]);
 
             if (day <= 0 || month <= 0 || month > 12 || year < 1900 || year > 2020) val = false;
-            else if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+            else if (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) {
                 if (day > 31) val = false;
             }
-            else if (month == 2) {
-                if (year % 4 == 0 && day > 29) val = false;
-                else if (year % 4 != 0 && day > 28) val = false;
+            else if (month === 2) {
+                if (year % 4 === 0 && day > 29) val = false;
+                else if (year % 4 !== 0 && day > 28) val = false;
             }
             else if (day > 30) val = false;
         }
@@ -344,7 +344,7 @@ function PersonalDataInputs({ idCourse }) {
         }
         else {
             setPersonalData({...personalData, relativeName: ""});
-            if (name == "") setErrors({...errors, relativeName: "Esse campo é obrigatório."});
+            if (name === "") setErrors({...errors, relativeName: "Esse campo é obrigatório."});
             else setErrors({...errors, relativeName: "Escreva o nome completo do responsável."});
         }
     }
@@ -355,12 +355,12 @@ function PersonalDataInputs({ idCourse }) {
     function handlePhone(phone) {
         var telRegEx;
 
-        while(phone[0] == '0') phone = phone.replace('0', ''); // Eliminar 0 do DDD, se houver
+        while(phone[0] === '0') phone = phone.replace('0', ''); // Eliminar 0 do DDD, se houver
         
         // Selecionar expressão regular
         var i = phone[2];
-        if(i == '9') telRegEx = telRegEx1; // Telefone celular
-        else if(i == '2' || i == '3' || i == '4' || i == '5') telRegEx = telRegEx2; // Telefone fixo
+        if(i === '9') telRegEx = telRegEx1; // Telefone celular
+        else if(i === '2' || i === '3' || i === '4' || i === '5') telRegEx = telRegEx2; // Telefone fixo
         else return "";
     
         if(telRegEx.test(phone)) return phone;

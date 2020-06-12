@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Container, ErrorMessage, GeneralErrorMessage } from '../pages/FormRegistration/styles';
-import FormRegistrationContext from '../pages/FormRegistration/context';
+import { Container, ErrorMessage, GeneralErrorMessage } from '../../pages/FormRegistration/styles';
+import FormRegistrationContext from '../../pages/FormRegistration/context';
 
 // Diferenças entre CASDvest e CASDinho
 const difCourses = [
@@ -28,7 +28,7 @@ function RegistrationFeeInputs({ idCourse }) {
   const [registrationFee, setRegistrationFee] = useState();
   const { formData, setFormData } = useContext(FormRegistrationContext);
 
-  useEffect(() => setFormData({...formData, ...registrationFee}), [registrationFee, setFormData, setRegistrationFee]);
+  useEffect(() => setFormData({...formData, ...registrationFee}), [formData, registrationFee, setFormData, setRegistrationFee]);
 
   function handleSelect(e) {
     var fee = e.target.value;
