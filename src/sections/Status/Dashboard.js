@@ -6,8 +6,10 @@ function Dashboard() {
   
   //lembrar de inserir um botão de logout - cancelar sessão no localStorage
   return (
-    <div>Dashboard</div>
-    <p>bottão para chamar o formulário de edição de infos</p>
+    <>
+      <div>Dashboard</div>
+      <p>bottão para chamar o formulário de edição de infos</p>
+    </>
   );
 }
 export default Dashboard;
