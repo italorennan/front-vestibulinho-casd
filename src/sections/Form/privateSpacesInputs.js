@@ -27,7 +27,7 @@ function PrivateSpacesInputs({ idCourse }) {
   const [privateSpace, setPrivateSpace] = useState();
   const { formData, setFormData } = useContext(FormRegistrationContext);
 
-  useEffect(() => setFormData({...formData, ...privateSpace}), [privateSpace, setFormData, setPrivateSpace]);
+  useEffect(() => setFormData({...formData, ...privateSpace}), [formData, privateSpace, setFormData, setPrivateSpace]);
 
   function handleSelect(e) {
     setPrivateSpace({...privateSpace, privateSpace: e.target.value});
