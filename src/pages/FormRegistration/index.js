@@ -27,7 +27,7 @@ function FormRegistration({ idCourse }) {
   const [actualSection, setActualSection] = useState(0);
   const [formData, setFormData] = useState({disabledButton: false, tryNext: false});
   const [address, setAddress] = useState({});
-  const [hasRGCandidate, setHasRGCandidate] = useState(false);
+  const [hasRGCandidate] = useState(false);
   const sizes=["0%", "16.7%", "33.3%", "50%", "66.7%", "83.3%", "100%"];
 
   const sections = [
