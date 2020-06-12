@@ -1,18 +1,29 @@
 import React, { useState, useEffect } from 'react';
-
-
-//https://stackoverflow.com/questions/11832930/html-input-file-accept-attribute-file-type-csv
+import XLSX from 'xlsx';
 
 function UploadButton() {
-  const [fileUpload, setFileUpload] = useState({});
+  const [jsonFile, setJsonFile] = useState({});
 
   function handleUploadFile(e) {
-    setFileUpload(e.target.files[0]);
+    convertExcelToJSON(e.target.files[0]);
   }
 
-  useEffect(() => {
-    console.log('fileUpload', fileUpload);
-  }, [fileUpload, setFileUpload]);
+  function convertExcelToJSON(excelFile) {
+    const reader = new FileReader();
+    reader.onload = (evt) => { 
+      const bstr = evt.target.result;
+      const wb = XLSX.read(bstr, {type:'binary'});
+      
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      
+      const data = XLSX.utils.sheet_to_json(ws, {header:1});
+      setJsonFile(data);
+    };
+    reader.readAsBinaryString(excelFile);
+  }
+  
+  useEffect(() => console.log('jsonFile', jsonFile), [jsonFile, setJsonFile]);
 
   return (
     <>
