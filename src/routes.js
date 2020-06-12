@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import FormInfos from './pages/FormInfos';
 import FormRegistration from './pages/FormRegistration';
+import CandidateStatus from './pages/CandidateStatus';
 
-export default function Routes() {
+export default function Routes({ idCourse }) {
   return (
     <BrowserRouter>
       <Switch>
-        {/* <Route path="/" exact component={FormInfos} /> */}
-        {/* <Route path="/inscricao" component={FormRegistration} /> */}
+        <Route path="/inscricao" render={() => <FormRegistration idCourse={idCourse} />} />
+        <Route path="/status" component={CandidateStatus} />
       </Switch>
     </BrowserRouter>
   );
