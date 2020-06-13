@@ -28,7 +28,7 @@ function RegistrationFeeInputs({ idCourse }) {
   const [registrationFee, setRegistrationFee] = useState();
   const { formData, setFormData } = useContext(FormRegistrationContext);
 
-  useEffect(() => setFormData({...formData, ...registrationFee}), [formData, registrationFee, setFormData, setRegistrationFee]);
+  useEffect(() => setFormData({...formData, ...registrationFee}), [registrationFee, setFormData, setRegistrationFee]);
 
   function handleSelect(e) {
     var fee = e.target.value;
