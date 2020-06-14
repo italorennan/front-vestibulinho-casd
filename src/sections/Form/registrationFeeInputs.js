@@ -39,7 +39,7 @@ function RegistrationFeeInputs({ idCourse }) {
 
   return (
     <Container>
-      <h3>Taxa de Inscrição</h3>
+      <h3>Taxa de inscrição</h3>
       { difCourses[0][idCourse].text }
    
       <label htmlFor="registrationFee">Solicitação de isenção <ast>*</ast></label>
