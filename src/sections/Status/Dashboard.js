@@ -12,8 +12,7 @@ function Dashboard({ idCourse }) {
   // 1 -> Prova aconteceu, resultado ainda não foi divulgado
   // 2 -> Resultado da prova já foi divulgado
   // 3 -> Entrevista Socioeconômica já aconteceu
-  // 4 -> Convocação para matrícula realizada
-  const processSituation = 4;
+  const [processSituation, setProcessSituation] = useState("0");
 
   // Informações de status do candidato
   // Ajustar para buscar no DB
@@ -21,15 +20,17 @@ function Dashboard({ idCourse }) {
                                         registrationStatus: true,
                                         exemptionStatus: "exempted",
                                         roomId: "1G2",
+                                        testPresence: true,
                                         grade: 40,
                                         privateSpace: true,
                                         esStatus: true,
+                                        esPresence: true,
                                         esDate: "11 de novembro de 2020",
                                         esTime: "19:15",
                                         esResult: true,
                                         enrollStatus: false});
   
-  const [buttons, setButtons] = useState({bttn1: false, bttn2: false, bttn3: false, bttn4: false, bttn5: false, bttn6: false, bttn7: false, bttn8: false});
+  const [buttons, setButtons] = useState({bttnRegistrationStatus: false, bttnExemption: false, bttnRoom: false, bttnTestPresence: false, bttnGrade: false, bttnPrivateSpace: false, bttnEsStatus: false, bttnEsPresence: false, bttnEsResult: false, bttnEnroll: false});
 
   const infosCourse = [
     {
@@ -59,35 +60,70 @@ function Dashboard({ idCourse }) {
   function handleButton(e) {
     e.preventDefault();
     switch(e.target.className) {
-      case "bttn1": setButtons({...buttons, bttn1: !(buttons.bttn1)}); break;
-      case "bttn2": setButtons({...buttons, bttn2: !(buttons.bttn2)}); break;
-      case "bttn3": setButtons({...buttons, bttn3: !(buttons.bttn3)}); break;
-      case "bttn4": setButtons({...buttons, bttn4: !(buttons.bttn4)}); break;
-      case "bttn5": setButtons({...buttons, bttn5: !(buttons.bttn5)}); break;
-      case "bttn6": setButtons({...buttons, bttn6: !(buttons.bttn6)}); break;
-      case "bttn7": setButtons({...buttons, bttn7: !(buttons.bttn7)}); break;
-      case "bttn8": setButtons({...buttons, bttn8: !(buttons.bttn8)}); break;
+      case "bttnRegistrationStatus": setButtons({...buttons, bttnRegistrationStatus: !(buttons.bttnRegistrationStatus)}); break;
+      case "bttnExemption": setButtons({...buttons, bttnExemption: !(buttons.bttnExemption)}); break;
+      case "bttnRoom": setButtons({...buttons, bttnRoom: !(buttons.bttnRoom)}); break;
+      case "bttnTestPresence": setButtons({...buttons, bttnTestPresence: !(buttons.bttnTestPresence)}); break;
+      case "bttnGrade": setButtons({...buttons, bttnGrade: !(buttons.bttnGrade)}); break;
+      case "bttnPrivateSpace": setButtons({...buttons, bttnPrivateSpace: !(buttons.bttnPrivateSpace)}); break;
+      case "bttnEsStatus": setButtons({...buttons, bttnEsStatus: !(buttons.bttnEsStatus)}); break;
+      case "bttnEsPresence": setButtons({...buttons, bttnEsPresence: !(buttons.bttnEsPresence)}); break;
+      case "bttnEsResult": setButtons({...buttons, bttnEsResult: !(buttons.bttnEsResult)}); break;
+      case "bttnEnroll": setButtons({...buttons, bttnEnroll: !(buttons.bttnEnroll)}); break;
     }
   }
 
   return (
     <>
+      {/* Campos temporários para feedback */}
+
+      <label>Selecionar visualização</label>
+      <select onChange={e => {setProcessSituation(e.target.value)}}>
+        <option value={"0"}>Antes da prova</option>
+        <option value={"1"}>Depois da prova, antes da divulgação do resultado</option>
+        <option value={"2"}>Depois da divulgação do resultado, antes da ES</option>
+        <option value={"3"}>Depois da ES</option>
+      </select>
+
+      <label>Selecionar presença na prova</label>
+      <select onChange={e => {if(e.target.value === "true") setStatus({...status, testPresence: true});
+                              else if(e.target.value === "false") setStatus({...status, testPresence: false})}}>
+        <option value={"true"}>Presente</option>
+        <option value={"false"}>Ausente</option>
+      </select>
+
+      <label>Selecionar resultado da prova</label>
+      <select onChange={e => {if(e.target.value === "true") setStatus({...status, esStatus: true});
+                              else if(e.target.value === "false") setStatus({...status, esStatus: false})}}>
+        <option value={"true"}>Passou</option>
+        <option value={"false"}>Não passou</option>
+      </select>
+
+      <label>Selecionar presença na ES</label>
+      <select onChange={e => {if(e.target.value === "true") setStatus({...status, esPresence: true});
+                              else if(e.target.value === "false") setStatus({...status, esPresence: false})}}>
+        <option value={"true"}>Presente</option>
+        <option value={"false"}>Ausente</option>
+      </select>
+
+      {/* Fim dos campos temporários */}
+
       <Section>
         <h4>Nome do candidato:</h4>
         <text>{status.name}</text>
       </Section>
 
-      {processSituation === 0 ? 
+      {processSituation === "0" ? 
 
       <><Section>
         <h4>Situação da inscrição:</h4>
         {status.registrationStatus === true ?
           <text>Confirmada.</text> :
           <text>Não confirmada.</text>}
-        <button className="bttn1" onClick={handleButton}>?</button>
+        <button className="bttnRegistrationStatus" onClick={handleButton}>?</button>
       </Section>
 
-      {buttons.bttn1 ? 
+      {buttons.bttnRegistrationStatus ? 
       <explain>O candidato com a inscrição <span>confirmada</span> já está cadastrado no Processo Seletivo.
       Se ocorreu algum problema com a sua inscrição, entre em contato com a administração do curso.</explain>
       : <></>}
@@ -103,10 +139,10 @@ function Dashboard({ idCourse }) {
         : (status.exemptionStatus === "analysis" ?
         <text>Em análise.</text>
         : <></>)))}
-        <button className="bttn2" onClick={handleButton}>?</button>
+        <button className="bttnExemption" onClick={handleButton}>?</button>
       </Section>
 
-      {buttons.bttn2 ?
+      {buttons.bttnExemption ?
       <><explain>Para participação no Processo Seletivo, é necessário o pagamento da taxa de inscrição de R$10,00 (dez reais), conforme previsto em edital, no dia da prova teórica.
       Entretanto, no momento da inscrição foi fornecida a opção de pedir <span>isenção</span> do pagamento, ou seja, a não necessidade de pagamento da taxa.</explain>
       <explain>Com isso, os candidatos <span>isentos</span> não precisam fazer o pagamento da taxa de inscrição.</explain>
@@ -124,10 +160,10 @@ function Dashboard({ idCourse }) {
       <Section>
         <h4>Sala de prova:</h4>
         <text>{status.roomId}</text>
-        <button className="bttn3" onClick={handleButton}>?</button>
+        <button className="bttnRoom" onClick={handleButton}>?</button>
       </Section>
 
-      {buttons.bttn3 ?
+      {buttons.bttnRoom ?
       <explain>A lista de salas de prova será divulgada até 1 (um) dia antes da data do Vestibulinho no site e nas redes sociais.
       A localização das salas estará indicada no local da prova no dia de sua realização.</explain>
       : <></>}
@@ -140,9 +176,35 @@ function Dashboard({ idCourse }) {
 
       <Button>Editar</Button>
 
-      </> : <></>}
+      </> : 
 
-      {processSituation === 1 ?
+      (status.testPresence === false ?
+      
+      <><Section>
+        <h4>Participação na prova teórica:</h4>
+        <text>Ausente.</text>
+        <button className="bttnTestPresence" onClick={handleButton}>?</button>
+      </Section>
+
+      {buttons.bttnTestPresence ?
+      <explain>Os candidatos registrados como <span>presentes</span> fizeram a prova teórica e terão seu resultado divulgado. Os candidatos <span>ausentes</span> não fizeram a prova teórica e não participam mais do Processo Seletivo.</explain>
+      : <></>}
+      
+      </> : 
+      
+      (processSituation === "1" ?
+      
+      <><Section>
+        <h4>Participação na prova teórica:</h4>
+        <text>Presente.</text>
+        <button className="bttnTestPresence" onClick={handleButton}>?</button>
+      </Section>
+
+      {buttons.bttnTestPresence ?
+      <explain>Os candidatos registrados como <span>presentes</span> fizeram a prova teórica e terão seu resultado divulgado. Os candidatos <span>ausentes</span> não fizeram a prova teórica e não participam mais do Processo Seletivo.</explain>
+      : <></>}
+      
+      {status.testPresence === true ?
       
       <><Section>
         <h4>Nota da prova teórica:</h4>
@@ -153,35 +215,37 @@ function Dashboard({ idCourse }) {
       
       </> : <></>}
 
-      {(processSituation === 2 || processSituation === 3 || processSituation === 4) ?
+      </> : <></>))}
+
+      {((processSituation === "2" || processSituation === "3") && status.testPresence === true) ?
       
       <><Section>
         <h4>Nota da prova teórica:</h4>
         <text>{status.grade}</text>
-        <button className="bttn4" onClick={handleButton}>?</button>
+        <button className="bttnGrade" onClick={handleButton}>?</button>
       </Section>
 
-      {buttons.bttn4 ?
+      {buttons.bttnGrade ?
       <explain>A prova teórica teve um total de {infos.numberQuestions} questões.</explain>
       : <></>}
 
       <Section>
         <h4>Vaga privativa?</h4>
         {status.privateSpace ? <text>Sim.</text> : <text>Não</text>}
-        <button className="bttn5" onClick={handleButton}>?</button>
+        <button className="bttnPrivateSpace" onClick={handleButton}>?</button>
       </Section>
 
-      {buttons.bttn5 ?
+      {buttons.bttnPrivateSpace ?
       <explain>Conforme previsto no edital do Processo Seletivo, {infos.privateSpaces} vagas são destinadas a candidatos autodeclarados pretos, pardos ou indígenas no momento da inscrição.</explain>
       : <></>}
 
       <Section>
         <h4>Resultado de convocação para a Entrevista Socioeconômica:</h4>
         {status.esStatus ? <text>Convocado.</text> : <text>Não convocado.</text>}
-        <button className="bttn6" onClick={handleButton}>?</button>
+        <button className="bttnEsStatus" onClick={handleButton}>?</button>
       </Section>
 
-      {buttons.bttn6 ?
+      {buttons.bttnEsStatus ?
       <><explain>A Entrevista Socioeconômica é a segunda etapa do Processo Seletivo e consiste na coleta de documentos para comprovar a situação socioeconômica do candidato, conforme previsto em edital.
       A partir da nota de corte, são definidos os candidatos aprovados para essa etapa. Entretanto, destacamos que a convocação não significa aprovação para entrada no curso.</explain>
       <explain>Os candidatos <span>convocados</span> atingiram a nota necessária na prova teórica.</explain></>
@@ -189,7 +253,7 @@ function Dashboard({ idCourse }) {
       
       </> : <></>}
 
-      {(processSituation === 2 && status.esStatus === true)?
+      {(processSituation === "2" && status.testPresence === true && status.esStatus === true)?
       
       <><Section>
         <h4>Informações sobre a Entrevista Socioeconômica:</h4>
@@ -209,35 +273,45 @@ function Dashboard({ idCourse }) {
 
       </> : <></>}
 
-      {((processSituation === 3 || processSituation === 4) && status.esStatus === true) ?
+      {(processSituation === "3" && status.testPresence === true && status.esStatus === true) ?
+      
+      <><Section>
+        <h4>Participação na Entrevista Socioeconômica:</h4>
+        {status.esPresence ? <text>Presente.</text> : <text>Ausente.</text>}
+        <button className="bttnEsPresence" onClick={handleButton}>?</button>
+      </Section>
+
+      {buttons.bttnEsPresence ?
+      <explain>Os candidatos registrados como <span>presentes</span> entregaram seus documentos na Entrevista Socioeconômica e terão seu resultado divulgado. Os candidatos <span>ausentes</span> não compareceram à Entrevista e não participam mais do Processo Seletivo.</explain>
+      : <></>}
+
+      {status.esPresence === true ?
       
       <><Section>
         <h4>Resultado da Entrevista Socioeconômica:</h4>
         {status.esResult ? <text>Aprovado.</text> : <text>Reprovado.</text>}
-        <button className="bttn7" onClick={handleButton}>?</button>
+        <button className="bttnEsResult" onClick={handleButton}>?</button>
       </Section>
 
-      {buttons.bttn7 ?
+      {buttons.bttnEsResult ?
       <explain>Os candidatos aprovados na Entrevista Socioeconômica se encaixam no perfil socioeconômico estipulado para o curso e estão aptos para serem convocados.
       Entretanto, essa aprovação não implica em aprovação direta para o curso. Os candidatos aprovados serão classificados de acordo com a nota na prova teórica e convocados para matrícula de acordo com a quantidade de vagas do curso.
       </explain>
       : <></>}
       
-      </> : <></>}
-
-      {(processSituation === 4 && status.esStatus === true && status.esResult === true) ?
-      
-      <><Section>
+      <Section>
         <h4>Resultado de convocação para matrícula:</h4>
         {status.enrollStatus ? <text>Convocado.</text> : <text>Não convocado.</text>}
-        <button className="bttn8" onClick={handleButton}>?</button>
+        <button className="bttnEnroll" onClick={handleButton}>?</button>
       </Section>
 
-      {buttons.bttn8 ?
+      {buttons.bttnEnroll ?
       <explain>Os candidatos convocados devem comparecer na sede do curso (Rua Tsunessaburo Makiguti, 139, Floradas de São José, São José dos Campos - SP, 12230-084) no dia e horário a serem divulgados no site e nas redes sociais do curso para realizarem sua matrícula.
       De acordo com a quantidade de alunos matriculados e a quantidade de vagas do curso, novas chamadas de convocação podem ser realizadas.
       </explain>
       : <></>}
+
+      </> : <></>}
 
       </> : <></>}
 
