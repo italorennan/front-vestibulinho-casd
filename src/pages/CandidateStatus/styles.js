@@ -27,7 +27,7 @@ export const Container = styled.div`
   h1 {
     font-family: 'Lobster';
     color: ${yellowCASD};
-    margin-block-start: 1em;
+    margin-block-start: 0.5em;
     margin-block-end: 0.5em;
     font-size: 2.5em;
     text-align: center;
@@ -40,6 +40,19 @@ export const Container = styled.div`
     margin-block-end: 1em;
     font-size: 2em;
     text-align: center;
+  }
+
+  h4 {
+    color: ${yellowCASD};
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+    font-size: 1em;
+    text-align: justify;
+  }
+
+  h4 > text {
+    color: white;
+    font-weight: 900;
   }
 
   text {
@@ -59,42 +72,51 @@ export const Container = styled.div`
     color: #00ffff;
   }
 
-  label {
-    font-weight: 900;
+  explain {
     color: white;
-    margin-block-start: 0.5em;
+    margin-block-start: 0em;
     margin-block-end: 0.5em;
-    font-size: 1em;
+    font-size: 0.8em;
     text-align: justify;
   }
 
-  label > ast {
-    color: #991111;
+  explain > span {
+    font-weight: 900;
+  }
+`;
+
+export const Section = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-block-start: 0.25em;
+  margin-block-end: 0.25em;
+  font-size: 1em;
+  align-items: center;
+
+  h4 {
+    color: ${yellowCASD};
+    margin-right: 0.1em;
   }
 
-  p {
+  text {
     color: white;
-    margin-block-start: 0.5em;
-    margin-block-end: 0.5em;
-    font-size: 0.8em;
+    font-weight: 900;
+    margin-left: 0.1em;
+    margin-right: 0.1em;
   }
 
-  input {
-    color: ${grayCASD};
-    margin-block-start: 0.5em;
-    margin-block-end: 1.5em;
-    padding: 0.5em;
-    font-size: 1em;
-  }
-
-  select {
-    font-family: Montserrat;
+  button {
     background-color: white;
     color: ${grayCASD};
-    margin-block-start: 0.5em;
-    margin-block-end: 1.5em;
-    padding: 0.5em;
-    font-size: 1em;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 0.8em;
+    margin-left: 0.1em;
+    width: 1em;
+    height: 1em;
   }
 `;
 
@@ -102,53 +124,16 @@ export const Button = styled.button`
   border-color: white;
   border-radius: 0.5em;
   color: ${grayCASD};
-  margin-block-start: 0em;
+  margin-block-start: 0.5em;
   margin-block-end: 0em;
-  margin-left: 5vw;
-  padding: 0.5em;
+  padding: 0em;
   font-size: 1em;
+  width: 5em;
+  height: 2em;
 
   &:hover {
     background: white;
   }
 
   opacity: ${props => props.checkDisabled ? 0.6 : 1};
-`;
-
-export const ErrorMessage = styled.p`
-	color: #991111 !important;
-  margin-block-start: 0em !important;
-  margin-block-end: 1.5em !important;
-`;
-
-export const GeneralErrorMessage = styled(ErrorMessage)`
-  color: ${yellowCASD} !important;
-  margin-block-end: 0.5em !important;
-`;
-
-export const Box = styled.div`
-  border-style: solid;
-  border-color: ${yellowCASD};
-  background: linear-gradient(90deg, ${yellowCASD} ${props => props.size}, ${blueCASD} ${props => props.size});
-  margin-left: 5vw;
-  margin-right: 5vw;
-  margin-block-end: 0.5em;
-  height: 5vh;
-`;
-
-export const PageButton = styled.div`
-  display: flex;
-  flex-direction: row wrap;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  margin-left: 5vw;
-  margin-right: 5vw;
-
-  button {
-    color: ${yellowCASD};
-    font-size: 1em;
-    background-color: ${blueCASD};
-    border: none;
-    cursor: pointer;
-  }
 `;

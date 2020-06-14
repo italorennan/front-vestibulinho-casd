@@ -236,8 +236,8 @@ function FormRegistration({ idCourse }) {
           <button className="page0" onClick={handlePageButton}>Início</button>
           <button className="page1" onClick={handlePageButton}>Dados iniciais</button>
           <button className="page2" onClick={handlePageButton}>Dados pessoais</button>
-          <button className="page3" onClick={handlePageButton}>Vagas Privativas</button>
-          <button className="page4" onClick={handlePageButton}>Taxa de Inscrição</button>
+          <button className="page3" onClick={handlePageButton}>Vagas privativas</button>
+          <button className="page4" onClick={handlePageButton}>Taxa de inscrição</button>
           <button className="page5" onClick={handlePageButton}>Confirmação</button>
         </PageButton>
         <form onSubmit={handleSubmit}>

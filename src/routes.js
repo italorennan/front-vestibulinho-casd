@@ -10,7 +10,7 @@ export default function Routes({ idCourse }) {
     <BrowserRouter>
       <Switch>
         <Route path="/inscricao" render={() => <FormRegistration idCourse={idCourse} />} />
-        <Route path="/status" component={CandidateStatus} />
+        <Route path="/status" render={() => <CandidateStatus idCourse = {idCourse} />} />
         <Route path="/admin" component={Admin} />
       </Switch>
     </BrowserRouter>
